@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 const { type } = require('os')
-
+const {
+    createHash,randomBytes
+  } = require('node:crypto');
+  
 
 const UserSchema = new mongoose.Schema({
 
@@ -32,6 +35,19 @@ const UserSchema = new mongoose.Schema({
 },
 {
     timestamps:true
+})
+
+UserSchema.pre('save',function (next) {
+    const user = this
+    if(!user.isModified()){
+        return
+    }
+
+    const salt = randomBytes(16)
+    const hashedpassword = createHash('sha256',salt).update(user.password).digest('hex')
+    
+    this.salt=salt
+    this.password=hashedpassword
 })
 
 module.exports = mongoose.model('User',UserSchema)
