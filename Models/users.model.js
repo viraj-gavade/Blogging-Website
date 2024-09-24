@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
 const { type } = require('os')
-const {
-    createHash,randomBytes
-  } = require('node:crypto');
+
+const { createHmac,randomBytes } = require('crypto');
   
 
 const UserSchema = new mongoose.Schema({
@@ -17,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     },
     salt:{
         type:String,
-        require:true
+      
     },
     password:{
         type:String,
@@ -37,17 +36,26 @@ const UserSchema = new mongoose.Schema({
     timestamps:true
 })
 
-UserSchema.pre('save',function (next) {
-    const user = this
-    if(!user.isModified()){
-        return
-    }
 
-    const salt = randomBytes(16)
-    const hashedpassword = createHash('sha256',salt).update(user.password).digest('hex')
-    
-    this.salt=salt
-    this.password=hashedpassword
-})
+
+UserSchema.pre('save', function (next) {
+    const user = this;
+
+    // Check if the password is modified
+    if (!user.isModified('password')) return next();
+
+    // Generate a salt and hash the password
+    const salt = randomBytes(16).toString();  // Use 'hex' for a valid string representation
+    const hashedPassword = createHmac('sha256', salt)
+        .update(user.password)
+        .digest('hex');
+
+    // Store the salt and hashed password
+    user.salt = salt;
+    user.password = hashedPassword;
+
+    next();  // Call next to proceed with saving
+});
+
 
 module.exports = mongoose.model('User',UserSchema)

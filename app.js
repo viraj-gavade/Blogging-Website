@@ -4,15 +4,14 @@ const path = require('path')
 const app = express()
 const connectDB = require('./Database/connect')
 const { url } = require("inspector")
-
+const UserRouter = require('./Routes/users.route')
 //Some Middleware Setups
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
 
-
-app.get('/test',(req,res)=>{
-    res.render('home')
-})
+app.use(express.urlencoded({extended:false}))
+app.use(express.json())
+app.use('/api/v1/user',UserRouter)
 
 
 const PORT = process.env.PORT || 3000
