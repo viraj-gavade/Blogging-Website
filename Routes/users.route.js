@@ -1,5 +1,5 @@
 const express = require('express')
-const {SignUpUser,SignInUser} = require('../Controllers/users.controllers')
+const {SignUpUser,SignInUser,SignOut} = require('../Controllers/users.controllers')
 const UserRouter = express.Router()
 
 
@@ -9,7 +9,7 @@ UserRouter.route('/signup').post(SignUpUser).get((req,res)=>{
 UserRouter.route('/signin').post(SignInUser).get((req,res)=>{
     res.render('signin')
 })
-// UserRouter.route('/logout').post(LogoutUser)
+UserRouter.route('/signout').get(SignOut)
 
 
 module.exports = UserRouter

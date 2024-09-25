@@ -1,7 +1,8 @@
 const JWT = require('jsonwebtoken')
 
-const GenerateToken = async(user)=>{
+const GenerateToken = (user)=>{
     const paylod = {
+        fullname:user.fullName,
         _id:user._id,
         email:user.email,
         password:user.password,
@@ -9,7 +10,7 @@ const GenerateToken = async(user)=>{
         Role:user.role
     }
 
-    const token = await JWT.sign(paylod,process.env.JWT_SECRETE,{
+    const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
         expiresIn:process.env.JWT_EXPIRY
     })
 
@@ -18,12 +19,12 @@ const GenerateToken = async(user)=>{
 }
 
 
-const ValidateToken = async(token)=>{
+const ValidateToken = (token)=>{
     const paylod = JWT.verify(token,process.env.JWT_SECRETE)
     return paylod
 }
 
-
+ 
 module.exports={
     ValidateToken,
     GenerateToken

@@ -13,13 +13,14 @@ app.set('views',path.resolve('./views'))
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser ())
 app.use(express.json())
-
-
-
-console.log(checkusertoken)
 app.use(checkusertoken('Token'));
-app.use('/api/v1/user',UserRouter)
 
+app.get('/',(req,res)=>{
+    res.render('home',{
+        user:req.user
+    })
+})
+app.use('/api/v1/user',UserRouter)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{

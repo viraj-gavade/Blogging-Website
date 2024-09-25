@@ -4,7 +4,7 @@ const checkusertoken = (TokenName)=>{
     return (req,res,next)=>{
         const token = req.cookies[TokenName]
         if(!token){
-         next()
+        return  next()
         }
     
     try {
@@ -13,7 +13,7 @@ const checkusertoken = (TokenName)=>{
     } catch (error) {
         console.log(error)
     }
-    next()
+   return next()
 }
 }
 

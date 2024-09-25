@@ -39,7 +39,12 @@ try {
     })
 }
 }
+
+const SignOut = async (req,res)=>{
+   return  res.clearCookie('Token').redirect('/')
+}
 module.exports ={
     SignUpUser,
-    SignInUser
+    SignInUser,
+    SignOut
 }
