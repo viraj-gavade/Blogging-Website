@@ -45,10 +45,10 @@ UserSchema.pre('save', function (next) {
     if (!user.isModified('password')) return next();
 
     // Generate a salt and hash the password
-    const salt = randomBytes(16).toString();  // Use 'hex' for a valid string representation
+    const salt = randomBytes(16).toString();  
     const hashedPassword = createHmac('sha256', salt)
         .update(user.password)
-        .digest('hex');
+        .digest('hex'); 
 
     // Store the salt and hashed password
     user.salt = salt;
@@ -58,7 +58,7 @@ UserSchema.pre('save', function (next) {
 });
 
 UserSchema.static('matchpassword', async function (email,password) {
-    const user = await USER.findOne({email})
+    const user =  await this.findOne({email})
     if(!user){
         throw new Error("User not found!")
     }
