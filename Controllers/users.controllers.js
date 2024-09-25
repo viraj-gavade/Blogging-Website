@@ -20,7 +20,18 @@ const SignUpUser = async (req,res)=>{
     return res.render('./home')
 }
 
+//Controller to signin the user
+
+const SignInUser = async(req,res)=>{
+    const { email ,password } = req.body
+    const user = await USER.matchpassword(email,password)
+
+    console.log("User",user)
+    
+    return res.render('./home')
+}
 
 module.exports ={
-    SignUpUser
+    SignUpUser,
+    SignInUser
 }

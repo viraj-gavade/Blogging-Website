@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const { type } = require('os')
-
+const USER = require('../Models/users.model')
 const { createHmac,randomBytes } = require('crypto');
   
 
@@ -57,5 +57,26 @@ UserSchema.pre('save', function (next) {
     next();  // Call next to proceed with saving
 });
 
+UserSchema.static('matchpassword', async function (email,password) {
+    const user = await USER.findOne({email})
+    if(!user){
+        throw new Error("User not found!")
+    }
+
+    const UserSalt = user.salt
+    const hashedPassword = user.password
+
+    //Check if user has provided the correct password
+
+    const UserProvidedPassword  = createHmac('sha256', UserSalt)
+    .update(password)
+    .digest('hex');
+
+    if(UserProvidedPassword !==hashedPassword ){
+        throw new Error("Incorrect password proovided!")
+    }
+
+    return {...user, password:undefined , salt:undefined}
+})
 
 module.exports = mongoose.model('User',UserSchema)
