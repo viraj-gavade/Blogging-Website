@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { type } = require('os')
 const USER = require('../Models/users.model')
 const { createHmac,randomBytes } = require('crypto');
+const { GenerateToken } = require('../Utils/authentication')
   
 
 const UserSchema = new mongoose.Schema({
@@ -57,7 +58,7 @@ UserSchema.pre('save', function (next) {
     next();  // Call next to proceed with saving
 });
 
-UserSchema.static('matchpassword', async function (email,password) {
+UserSchema.static('matchpasswordAndGenerateToken', async function (email,password) {
     const user =  await this.findOne({email})
     if(!user){
         throw new Error("User not found!")
@@ -76,7 +77,8 @@ UserSchema.static('matchpassword', async function (email,password) {
         throw new Error("Incorrect password proovided!")
     }
 
-    return {...user, password:undefined , salt:undefined}
+    const token = GenerateToken(user)
+    return token
 })
 
 module.exports = mongoose.model('User',UserSchema)

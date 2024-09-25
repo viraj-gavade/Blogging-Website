@@ -24,13 +24,19 @@ const SignUpUser = async (req,res)=>{
 
 const SignInUser = async(req,res)=>{ 
     const { email ,password } = req.body
-    const user = await USER.matchpassword(email,password)
-
-    console.log("User",user)
+try {
+        const token = await USER.matchpasswordAndGenerateToken(email,password)
     
-    return res.render('./home')
+        console.log("User",token)
+        
+        return res.cookie('Token',token).render('./home')
+    } catch (error) {
+    
+    return res.render('signin',{
+        error:"Incorrect Email or pasword"
+    })
 }
-
+}
 module.exports ={
     SignUpUser,
     SignInUser
