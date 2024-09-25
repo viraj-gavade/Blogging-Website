@@ -22,7 +22,7 @@ const SignUpUser = async (req,res)=>{
 
 //Controller to signin the user
 
-const SignInUser = async(req,res)=>{
+const SignInUser = async(req,res)=>{ 
     const { email ,password } = req.body
     const user = await USER.matchpassword(email,password)
 
