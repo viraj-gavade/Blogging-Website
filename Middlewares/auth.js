@@ -1,21 +1,20 @@
 const { ValidateToken } = require("../Utils/authentication")
 
-
-
-const checkusertoken = async (TokenName)=>{
+const checkusertoken = (TokenName)=>{
     return (req,res,next)=>{
-        const token = req.user.cookies[TokenName]
+        const token = req.cookies[TokenName]
         if(!token){
-            return next()
+         next()
         }
     
     try {
         const userPaylod = ValidateToken(token)
         req.user = userPaylod
     } catch (error) {
-        return next()
+        console.log(error)
     }
+    next()
 }
 }
 
-module.exports = checkusertoken
+module.exports = {checkusertoken}

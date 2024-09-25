@@ -3,14 +3,21 @@ const path = require('path')
 //Creating an expressapp
 const app = express()
 const connectDB = require('./Database/connect')
-const { url } = require("inspector")
 const UserRouter = require('./Routes/users.route')
+const cookieParser  = require('cookie-parser')
+const {checkusertoken} = require("./Middlewares/auth")
 //Some Middleware Setups
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
 
 app.use(express.urlencoded({extended:false}))
+app.use(cookieParser ())
 app.use(express.json())
+
+
+
+console.log(checkusertoken)
+app.use(checkusertoken('Token'));
 app.use('/api/v1/user',UserRouter)
 
 

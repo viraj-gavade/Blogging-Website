@@ -29,7 +29,9 @@ try {
     
         console.log("User",token)
         
-        return res.cookie('Token',token).render('./home')
+        return res.cookie('Token',token).render('./home',{
+            user:req.user
+        })
     } catch (error) {
     
     return res.render('signin',{
