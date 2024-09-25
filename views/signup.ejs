@@ -88,10 +88,19 @@
 .form button:hover {
   background-color: #005ce6;
 }
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 5rem;
+  
+}
     </style>
 </head>
 <body>
     <%- include('./partials/nav') %>
+    <div class="container">
     <div class="form-box">
     <form class="form" action="/api/v1/user/signup" method="post">
         <span class="title">Sign up</span>
@@ -107,6 +116,7 @@
       <p>Have an account? <a href="/api/v1/user/signin">Log in</a> </p>
     </div>
     </div>
+  </div>
 
 
 

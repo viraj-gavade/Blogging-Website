@@ -5,7 +5,7 @@
     <style>
         /* From Uiverse.io by nathann09 */ 
 .form {
-  background-color: #fff;
+  background: #f1f7fe;
   display: block;
   padding: 1rem;
   max-width: 350px;
@@ -48,13 +48,13 @@
   padding-bottom: 0.75rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  background-color: #4F46E5;
+  background-color: #0066ff;
   color: #ffffff;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: 24px;
   text-transform: uppercase;
 }
 
@@ -68,13 +68,19 @@
 .signup-link a {
   text-decoration: underline;
 }
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+}
     </style>
     <title>Home Page</title>
 </head>
 <body>
     <%- include('./partials/nav') %>
     
-
+  <div class="container">
     <form class="form" method="post" action="/api/v1/user/signin">
        <p class="form-title">Sign in to your account</p>
         <div class="input-container">
@@ -94,7 +100,7 @@
         <a href="/api/v1/user/signup">Sign up</a>
       </p>
    </form>
-
+</div>
     <%- include('./partials/script') %>
 </body>
 </html>
