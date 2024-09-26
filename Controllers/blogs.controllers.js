@@ -18,7 +18,7 @@ const PostBlog = async (req,res)=>{
     const blog = await Blog.create({
         title:title,
         body:body,
-        CoverImageURL:CoverImageURL,
+        CoverImageURL:CoverImageURL.url,
         createdBy:req.user
     })
 

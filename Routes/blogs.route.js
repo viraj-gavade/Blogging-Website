@@ -1,5 +1,5 @@
 const express = require('express')
-
+const { PostBlog } = require('../Controllers/blogs.controllers')
 const upload = require('../Middlewares/multer.middleware')
 
 const BlogRouter = express.Router()
@@ -10,7 +10,7 @@ BlogRouter.route('/addblog')
 
 BlogRouter.route('/').get((req,res)=>{
     res.render('addBlog')
-})   
+})    
  
 // BlogRouter.route('/:BlogId')
 // .get(GetSingleBlog)
