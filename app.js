@@ -5,7 +5,8 @@ const app = express()
 const connectDB = require('./Database/connect')
 const UserRouter = require('./Routes/users.route')
 const cookieParser  = require('cookie-parser')
-const {checkusertoken} = require("./Middlewares/auth")
+const {checkusertoken} = require("./Middlewares/auth.middleware")
+const { BlogRouter } = require("./Routes/blogs.route")
 //Some Middleware Setups
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
@@ -21,6 +22,7 @@ app.get('/',(req,res)=>{
     })
 })
 app.use('/api/v1/user',UserRouter)
+app.use('/api/v1/blog',BlogRouter)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{
