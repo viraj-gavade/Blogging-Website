@@ -7,6 +7,7 @@ const UserRouter = require('./Routes/users.route')
 const cookieParser  = require('cookie-parser')
 const {checkusertoken} = require("./Middlewares/auth.middleware")
 const { BlogRouter } = require("./Routes/blogs.route")
+const Blog = require('./Models/blogs.models')
 //Some Middleware Setups
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
@@ -23,6 +24,15 @@ app.get('/',(req,res)=>{
 })
 app.use('/api/v1/user',UserRouter)
 app.use('/api/v1/blog',BlogRouter)
+
+app.get('/', async (req,res)=>{
+    const Blogs = await Blog.find({})
+    console.log(Blogs)
+    res.status(200).json({
+        blogs:Blogs
+    })
+})
+
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{

@@ -27,6 +27,16 @@ const PostBlog = async (req,res)=>{
     })
 }
 
+const GetAllBlogs = async (req,res)=>{
+    const Blogs = await Blog.find({})
+    console.log(Blogs)
+    return res.render('home',{
+        user:req.user,
+        allblogs:Blogs
+    })
+}
+
 module.exports = {
-    PostBlog
+    PostBlog,
+    GetAllBlogs
 }
