@@ -30,7 +30,8 @@ try {
         console.log("User",token)
         
         return res.cookie('Token',token).render('./home',{
-            user:req.user
+            user:req.user,
+            
         })
     } catch (error) {
     
