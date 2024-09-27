@@ -1,5 +1,5 @@
 const express = require('express')
-const { PostBlog,GetAllBlogs } = require('../Controllers/blogs.controllers')
+const { PostBlog,GetAllBlogs ,GetSingleBlog} = require('../Controllers/blogs.controllers')
 const upload = require('../Middlewares/multer.middleware')
 
 const BlogRouter = express.Router()
@@ -16,8 +16,8 @@ BlogRouter.route('/addblog').get((req,res)=>{
 
 BlogRouter.route('/allBlogs').get(GetAllBlogs)
  
-// BlogRouter.route('/:BlogId')
-// .get(GetSingleBlog)
+BlogRouter.route('/:BlogId')
+.get(GetSingleBlog)
 // .patch(UpdateBlog)
 // .delete(DeleteBlog)    
 

@@ -19,7 +19,7 @@ const PostBlog = async (req,res)=>{
         title:title,
         body:body,
         CoverImageURL:CoverImageURL.url,
-        createdBy:req.user
+        createdBy:req.user.fullName
     })
 
     return res.render('home',{
@@ -35,8 +35,20 @@ const GetAllBlogs = async (req,res)=>{
         allblogs:Blogs
     })
 }
-
+const GetSingleBlog = async (req,res)=>{
+    const { BlogId } = req.params
+    const Blogs = await Blog.findById(BlogId)
+    console.log(Blogs)
+    return res.render('blog',{
+        user:req.user,
+        singleBlog:Blogs
+    })
+}
 module.exports = {
     PostBlog,
-    GetAllBlogs
+    GetAllBlogs,
+    GetSingleBlog
+    
+    
+
 }

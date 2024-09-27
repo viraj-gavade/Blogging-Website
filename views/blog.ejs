@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .post-meta {
+            color: #777;
+            margin-bottom: 20px;
+        }
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .post-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Blog</h1>
+    </header>
+
+    <article class="post-content">
+        <h1><%=singleBlog.title  %></h1>
+        <div class="post-meta">
+            Posted on <%= singleBlog.createdAt %> by <%= singleBlog.createdBy %>
+        </div>
+        <img src="<%= singleBlog.CoverImageURL %>" alt="{{title}}" class="post-image">
+        <div>
+            <%=singleBlog.body  %>
+        </div>
+    </article>
+
+    <a href="http://localhost:3000/api/v1/blog/allBlogs" class="back-link">Back to Blog List</a>
+</body>
+</html>
