@@ -9,7 +9,9 @@ BlogRouter.route('/addblog')
 .post(upload.single('CoverImageURL'),PostBlog)
 
 BlogRouter.route('/').get((req,res)=>{
-    res.render('addBlog')
+    res.render('addBlog',{
+        user:req.user
+    })
 })    
  
 // BlogRouter.route('/:BlogId')

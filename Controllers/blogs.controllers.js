@@ -22,7 +22,9 @@ const PostBlog = async (req,res)=>{
         createdBy:req.user
     })
 
-    return res.render('home')
+    return res.render('home',{
+        user:req.user
+    })
 }
 
 module.exports = {
