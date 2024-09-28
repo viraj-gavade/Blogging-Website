@@ -47,7 +47,7 @@ const GetSingleBlog = async (req,res)=>{
       })
       const AllCommets = await Comment.find({
         CommentOn:BlogId
-      })
+      }).populate('CommentBy')
     console.log(Blogs)
     return res.render('blog',{
         user:req.user,
