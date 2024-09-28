@@ -72,12 +72,10 @@
             background-color: #555;
         }
     </style>
+     <%- include('./partials/head') %>
 </head>
 <body>
-    <header>
-        <h1>My Blog</h1>
-    </header>
-    
+    <%- include('./partials/nav') %>
     <main>
         <article class="post-content">
             <h1><%= singleBlog.title %></h1>
