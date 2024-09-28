@@ -1,5 +1,5 @@
 const express = require('express')
-const { PostBlog,GetAllBlogs ,GetSingleBlog} = require('../Controllers/blogs.controllers')
+const { PostBlog,GetAllBlogs ,GetSingleBlog,createComment} = require('../Controllers/blogs.controllers')
 const upload = require('../Middlewares/multer.middleware')
 
 const BlogRouter = express.Router()
@@ -21,6 +21,8 @@ BlogRouter.route('/:BlogId')
 // .patch(UpdateBlog)
 // .delete(DeleteBlog)    
 
+BlogRouter.route('/comment/:BlogId')
+.post(createComment)
 
 module.exports={
     BlogRouter 

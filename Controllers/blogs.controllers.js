@@ -1,6 +1,7 @@
 const upload = require('../Middlewares/multer.middleware')
 const Blog = require('../Models/blogs.models')
 const uploadFile = require('../Utils/cloudinary')
+const Comment = require('../Models/comments.models') 
 
 const PostBlog = async (req,res)=>{
     const { title , body } = req.body
@@ -50,10 +51,23 @@ const GetSingleBlog = async (req,res)=>{
     })
     
 }
+
+const createComment = async ( req,res)=>{
+    const { BlogId } = req.params
+    const { content } = req.body
+    const comment = await Comment.create({
+        content:content,
+        CommentBy:req.user._id,
+        CommentOn:BlogId
+
+    })
+    return  res.send(comment)
+}
 module.exports = {
     PostBlog,
     GetAllBlogs,
-    GetSingleBlog
+    GetSingleBlog,
+    createComment
     
     
 
