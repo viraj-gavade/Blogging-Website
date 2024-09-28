@@ -64,7 +64,7 @@
     <article class="post-content">
         <h1><%=singleBlog.title  %></h1>
         <div class="post-meta">
-            Posted on <%= singleBlog.createdAt %> by <%= singleBlog.createdBy %>
+            Posted on <%= singleBlog.createdAt %> by <%= singleBlog.createdBy.fullName %>
         </div>
         <img src="<%= singleBlog.CoverImageURL %>" alt="{{title}}" class="post-image">
         <div>

@@ -18,17 +18,19 @@ const PostBlog = async (req,res)=>{
     const blog = await Blog.create({
         title:title,
         body:body,
-        CoverImageURL:CoverImageURL.url,
+        CoverImageURL:CoverImageURL.url ,
         createdBy:req.user.fullName
     })
-
+    const Blogs = await Blog.find({}).populate('createdBy')
+    console.log(Blogs)
     return res.render('home',{
-        user:req.user
+        user:req.user,
+        allblogs:Blogs
     })
 }
 
 const GetAllBlogs = async (req,res)=>{
-    const Blogs = await Blog.find({})
+    const Blogs = await Blog.find({}).populate('createdBy')
     console.log(Blogs)
     return res.render('home',{
         user:req.user,
@@ -37,12 +39,16 @@ const GetAllBlogs = async (req,res)=>{
 }
 const GetSingleBlog = async (req,res)=>{
     const { BlogId } = req.params
-    const Blogs = await Blog.findById(BlogId)
+    const Blogs = await Blog.findById(BlogId).populate({
+        path: 'createdBy',
+        select: 'fullName'  // Specify fields to populate
+      })
     console.log(Blogs)
     return res.render('blog',{
         user:req.user,
         singleBlog:Blogs
     })
+    
 }
 module.exports = {
     PostBlog,
