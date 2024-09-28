@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%- include('./partials/head') %>
-    <title>Blog</title>
+    <title>Blog Post Title</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,57 +21,103 @@
             padding: 1rem;
             margin-bottom: 20px;
         }
-        h1 {
+        h1, h2 {
             color: #333;
         }
         .post-meta {
             color: #777;
             margin-bottom: 20px;
+            font-style: italic;
         }
         .post-image {
             max-width: 100%;
             height: auto;
             margin-bottom: 20px;
         }
-        .post-content {
+        .post-content, .comments-section, .comment-form {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .comment:last-child {
+            border-bottom: none;
+        }
+        .comment-meta {
+            font-size: 0.9em;
+            color: #777;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .comment-form button {
             background-color: #333;
             color: #fff;
-            text-decoration: none;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
             border-radius: 5px;
         }
-        .back-link:hover {
+        .comment-form button:hover {
             background-color: #555;
         }
     </style>
 </head>
 <body>
-    <%- include('./partials/nav') %>
-    <div>
     <header>
         <h1>My Blog</h1>
     </header>
-
-    <article class="post-content">
-        <h1><%=singleBlog.title  %></h1>
-        <div class="post-meta">
-            Posted on <%= singleBlog.createdAt %> by <%= singleBlog.createdBy.fullName %>
-        </div>
-        <img src="<%= singleBlog.CoverImageURL %>" alt="{{title}}" class="post-image">
-        <div>
-            <%=singleBlog.body  %>
-        </div>
-    </article>
-</div>
-    <a href="http://localhost:3000/api/v1/blog/allBlogs" class="back-link">Back to Blog List</a>
-    <%- include('./partials/script') %>
+    
+    <main>
+        <article class="post-content">
+            <h1><%= singleBlog.title %></h1>
+            <div class="post-meta">
+                Posted on <%= singleBlog.createdAt %>, 2024 by  <%= %>
+            </div>
+            <img src="<%- singleBlog.CoverImageURL %>" alt="AI concept image" class="post-image">
+            <div>
+                <%= singleBlog.body %>
+            </div>
+        </article>
+        
+        <section class="comments-section">
+            <h2>Comments</h2>
+            <% comments.forEach(comment => { %>
+                <div class="comment">
+                    <p><%- comment.content %></p>
+                    <div class="comment-meta">
+                        Posted on <%= comment.createdAt %>
+                    </div>
+                    <div class="comment-meta">
+                        By <%= comment.CommentBy %>
+                    </div>
+                </div>
+            <% }) %>
+            </div>
+        </section>
+        <% if (locals.user) { %>
+            <section class="comment-form">
+                <h2>Add a Comment</h2>
+                <form action="/api/v1/blog/comment/<%= singleBlog._id %>" method="POST">
+                    <div>
+                        <label for="content">Your comment:</label>
+                        <textarea id="content" name="content" rows="4" required></textarea>
+                    </div>
+                    <button type="submit">Submit Comment</button>
+                </form>
+            </section>
+        <% } %>
+       
+    </main>
 </body>
 </html>
