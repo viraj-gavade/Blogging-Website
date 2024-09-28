@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Post Title</title>
+    <title>Blogify</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -80,7 +80,7 @@
         <article class="post-content">
             <h1><%= singleBlog.title %></h1>
             <div class="post-meta">
-                Posted on <%= singleBlog.createdAt %>, 2024 by  <%= %>
+                Posted on <%= singleBlog.createdAt %>, 2024 by <%= singleBlog.createdBy.fullName %> <%= %>
             </div>
             <img src="<%- singleBlog.CoverImageURL %>" alt="AI concept image" class="post-image">
             <div>

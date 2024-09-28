@@ -20,7 +20,7 @@ const PostBlog = async (req,res)=>{
         title:title,
         body:body,
         CoverImageURL:CoverImageURL.url ,
-        createdBy:req.user.fullName
+        createdBy:req.user
     })
     const Blogs = await Blog.find({}).populate('createdBy')
     console.log(Blogs)
@@ -32,6 +32,7 @@ const PostBlog = async (req,res)=>{
 
 const GetAllBlogs = async (req,res)=>{
     const Blogs = await Blog.find({}).populate('createdBy')
+    console.log(JSON.stringify(Blogs, null, 2)); // Inspect the populated blogs
     console.log(Blogs)
     return res.render('home',{
         user:req.user,
