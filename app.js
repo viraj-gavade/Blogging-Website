@@ -1,79 +1,70 @@
-const express = require("express")
-const path = require('path')
-const passport = require('passport')
-const GoogleStrategy = require('passport-google-oauth20').Strategy
-const session = require('express-session')
-//Creating an expressapp
-const app = express()
-const connectDB = require('./Database/connect')
-const UserRouter = require('./Routes/users.route')
-const cookieParser  = require('cookie-parser')
-const {checkusertoken} = require("./Middlewares/auth.middleware")
-const { BlogRouter } = require("./Routes/blogs.route")
-const Blog = require('./Models/blogs.models')
-const OauthRouter = require("./Routes/Oauth2.router")
-//Some Middleware Setups
-app.set('view engine','ejs')
-app.set('views',path.resolve('./views'))
+require('dotenv').config()
+const express = require("express");
+const path = require('path');
+const passport = require('passport');
+const session = require('express-session');
+const cookieParser  = require('cookie-parser');
+const connectDB = require('./Database/connect');
+const UserRouter = require('./Routes/users.route');
+const { checkusertoken } = require("./Middlewares/auth.middleware");
+const { BlogRouter } = require("./Routes/blogs.route");
+const OauthRouter = require("./Routes/Oauth2.router");
+const Blog = require('./Models/blogs.models');
 
+// Create an express app
+const app = express();
+
+// Middleware setups
+app.set('view engine', 'ejs');
+app.set('views', path.resolve('./views'));
 
 app.use(session({
-    secret:process.env.SECRETE,
-    resave:false,
-    saveUninitialized:true
-}))
-app.use(express.urlencoded({extended:false}))
-app.use(cookieParser ())
-app.use(express.json())
+    secret: process.env.SECRETE,
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.json());
+
+// Use middleware to check the user token
 app.use(checkusertoken('Token'));
-app.use(passport.initialize())
-app.use(passport.session())
 
-app.use(session({
-    secret:process.env.SECRETE,
-    resave:false,
-    saveUninitialized:true
-}))
-app.get('/',(req,res)=>{
-    res.render('home',{
-        user:req.user
-    })
-})
-app.use('/api/v1/user',UserRouter)
-app.use('/api/v1/blog',BlogRouter)
-app.use('/',OauthRouter)
+// Initialize Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/', async (req,res)=>{
-    const Blogs = await Blog.find({})
-    console.log(Blogs)
-    res.status(200).json({
-        blogs:Blogs
-    })
-})
+// Define routes
+app.get('/', async (req, res) => {
+    const Blogs = await Blog.find({}).populate('createdBy');
+    res.render('home', {
+        user: req.user,
+        allblogs: Blogs
+    });
+});
 
+// User and Blog Routes
+app.use('/api/v1/user', UserRouter);
+app.use('/api/v1/blog', BlogRouter);
 
-app.get('/',(req,res)=>{
-    res.render('home')
-})
+// OAuth Router
+app.use('/', OauthRouter);
 
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is listening on PORT: ${PORT}`);
+});
 
-
-const PORT = process.env.PORT || 3000
-app.listen(PORT,()=>{
-    console.log(`Server is listining on PORT:-${PORT}`)
-})
-//Database connection
-
-const connectdb = async()=>{
+// Connect to the database
+const connectdb = async () => {
     try {
-        connectDB()
-        .then(()=>{
-            console.log('server is listining on port:-',PORT)
-        })
+        await connectDB();
+        console.log('Connected to the database');
     } catch (error) {
-        console.log(error)
+        console.log('Database connection error:', error);
     }
-}
+};
 
-
-connectdb()
+connectdb();

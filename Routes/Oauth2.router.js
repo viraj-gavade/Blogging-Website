@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const OauthRouter = express.Router()
 const passport = require('passport')
@@ -8,7 +9,7 @@ const Blog = require('../Models/blogs.models')
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRETE,
-    callbackURL: 'http://localhost:3000/auth/google/callback'
+    callbackURL: 'https://blogify-gr5rm1tg.b4a.run/auth/google/callback'
   }, (accessToken, refreshToken, profile, done) => {
     // Find or create user in your DB here
     return done(null, profile);
@@ -23,7 +24,9 @@ passport.use(new GoogleStrategy({
   });
   
 OauthRouter.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
+OauthRouter.get('/signin',(req,res)=>{
+  res.send("Debug Statement")
+})
 // OAuth2 callback
 OauthRouter.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
