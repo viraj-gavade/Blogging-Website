@@ -9,7 +9,7 @@ const Blog = require('../Models/blogs.models')
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRETE,
-    callbackURL: 'https://blogify-gr5rm1tg.b4a.run/auth/google/callback'
+    callbackURL: process.env.CALLBACK_URL
   }, (accessToken, refreshToken, profile, done) => {
     // Find or create user in your DB here
     return done(null, profile);
