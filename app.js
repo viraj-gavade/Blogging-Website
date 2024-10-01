@@ -1,5 +1,8 @@
 const express = require("express")
 const path = require('path')
+const passport = require('passport')
+const GoogleStrategy = require('passport-google-oauth20').Strategy
+const session = require('express-session')
 //Creating an expressapp
 const app = express()
 const connectDB = require('./Database/connect')
@@ -12,11 +15,24 @@ const Blog = require('./Models/blogs.models')
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
 
+
+app.use(session({
+    secret:process.env.SECRETE,
+    resave:false,
+    saveUninitialized:true
+}))
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser ())
 app.use(express.json())
 app.use(checkusertoken('Token'));
+app.use(passport.initialize())
+app.use(passport.session())
 
+app.use(session({
+    secret:process.env.SECRETE,
+    resave:false,
+    saveUninitialized:true
+}))
 app.get('/',(req,res)=>{
     res.render('home',{
         user:req.user
@@ -32,6 +48,17 @@ app.get('/', async (req,res)=>{
         blogs:Blogs
     })
 })
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRETE,
+    callbackURL: 'http://localhost:3000/auth/google/callback'
+  }, (accessToken, refreshToken, profile, done) => {
+    // Find or create user in your DB here
+    return done(null, profile);
+  }));
+  
+
 
 
 const PORT = process.env.PORT || 3000
