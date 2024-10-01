@@ -58,34 +58,13 @@ passport.use(new GoogleStrategy({
     return done(null, profile);
   }));
   
-  passport.serializeUser((user, done) => {
-    done(null, user);
-  });
-  
-  passport.deserializeUser((user, done) => {
-    done(null, user);
-  });
-// Google OAuth route
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// OAuth2 callback
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/profile');
-  });
 
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{
     console.log(`Server is listining on PORT:-${PORT}`)
 })
-app.get('/profile', (req, res) => {
-    if (req.isAuthenticated()) {
-      res.send(`Hello ${req.user.displayName}`);
-    } else {
-      res.redirect('/');
-    }
-  });
 //Database connection
 
 const connectdb = async()=>{
