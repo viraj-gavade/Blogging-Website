@@ -11,6 +11,7 @@ const cookieParser  = require('cookie-parser')
 const {checkusertoken} = require("./Middlewares/auth.middleware")
 const { BlogRouter } = require("./Routes/blogs.route")
 const Blog = require('./Models/blogs.models')
+const OauthRouter = require("./Routes/Oauth2.router")
 //Some Middleware Setups
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
@@ -40,6 +41,7 @@ app.get('/',(req,res)=>{
 })
 app.use('/api/v1/user',UserRouter)
 app.use('/api/v1/blog',BlogRouter)
+app.use('/',OauthRouter)
 
 app.get('/', async (req,res)=>{
     const Blogs = await Blog.find({})
@@ -49,15 +51,10 @@ app.get('/', async (req,res)=>{
     })
 })
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRETE,
-    callbackURL: 'http://localhost:3000/auth/google/callback'
-  }, (accessToken, refreshToken, profile, done) => {
-    // Find or create user in your DB here
-    return done(null, profile);
-  }));
-  
+
+app.get('/',(req,res)=>{
+    res.render('home')
+})
 
 
 
