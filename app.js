@@ -10,11 +10,17 @@ const { checkusertoken } = require("./Middlewares/auth.middleware");
 const { BlogRouter } = require("./Routes/blogs.route");
 const OauthRouter = require("./Routes/Oauth2.router");
 const Blog = require('./Models/blogs.models');
-
+const {ApolloServer } = require('@apollo/server')
+const { expressMiddleware } = require('@apollo/server/express4')
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const { Query } = require('mongoose');
+const USER = require('./Models/users.model')
+const mongoose = require('mongoose')
 // Create an express app
-const app = express();
+const app = express()
 
-// Middleware setups
+// // Middleware setups
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
 
@@ -51,11 +57,49 @@ app.use('/api/v1/blog', BlogRouter);
 // OAuth Router
 app.use('/', OauthRouter);
 
-// Start the server
+
+async function StartSever() {
+   
+    const server = new ApolloServer({
+        typeDefs:`
+        type User{
+        id:ID!
+        fullName:String!
+        }
+
+        type Blog{
+        title:String!
+        id:ID!
+
+        }
+
+        type Query {
+        getAllUsers:[User]
+        getAllBlogs:[Blog]
+        }
+        `,
+        resolvers:{
+            Query: {
+                getAllUsers:  async () =>await USER.find({}),
+                getAllBlogs:  async () =>await Blog.find({})
+            }
+
+        }
+    })
+
+    app.use(bodyParser.json())
+    app.use(cors())
+
+    await server.start()
+
+    app.use('/graphql',expressMiddleware(server))
+    // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is listening on PORT: ${PORT}`);
 });
+}
+
 
 // Connect to the database
 const connectdb = async () => {
@@ -68,3 +112,5 @@ const connectdb = async () => {
 };
 
 connectdb();
+
+StartSever()
