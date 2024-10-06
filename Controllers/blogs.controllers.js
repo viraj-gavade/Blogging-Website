@@ -24,9 +24,8 @@ const PostBlog = async (req,res)=>{
             title:title,
             body:body,
             CoverImageURL:CoverImageURL.url ,
-            createdBy:req.user
         })
-        const Blogs = await Blog.find({}).populate('createdBy')
+        const Blogs = await Blog.find({}).populate('title')
         return res.render('home',{
             user:req.user,
             allblogs:Blogs
@@ -41,7 +40,7 @@ const PostBlog = async (req,res)=>{
 //Controller that gets all blog post and renders them on the front-end.
 const GetAllBlogs = async (req,res)=>{
     try {
-        const Blogs = await Blog.find({}).populate('createdBy')
+        const Blogs = await Blog.find({}).populate('title')
         return res.render('home',{
             user:req.user,
             allblogs:Blogs
@@ -56,7 +55,7 @@ const GetSingleBlog = async (req,res)=>{
    try {
      const { BlogId } = req.params
      const Blogs = await Blog.findById(BlogId).populate({
-         path: 'createdBy',
+         path: 'title',
          select: 'fullName'  // Specify fields to populate
        })
        const AllCommets = await Comment.find({
@@ -86,7 +85,7 @@ const createComment = async ( req,res)=>{
   
       })
       const Blogs = await Blog.findById(BlogId).populate({
-          path: 'createdBy',
+          path: 'title',
           select: 'fullName'  // Specify fields to populate
         })
         const AllCommets = await Comment.find({
