@@ -59,7 +59,7 @@ OauthRouter.get('/profile', async (req, res) => {
   if (req.isAuthenticated()) {
     console.log('User is authenticated, rendering profile');
     console.log('Authenticated User Profile:', req.user); // Log user profile info
-    const Blogs = await Blog.find({}).populate('createdBy');
+    const Blogs = await Blog.find({}).populate('title');
     res.render('home', {
       user: req.user,
       allblogs: Blogs
