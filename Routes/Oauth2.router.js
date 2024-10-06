@@ -5,6 +5,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const Blog = require('../Models/blogs.models');
+const User = require('../Models/users.model')
 
 // Google OAuth strategy configuration
 passport.use(new GoogleStrategy({
@@ -12,11 +13,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
   }, (accessToken, refreshToken, profile, done) => {
-    // Log Google profile and tokens
-    console.log('Access Token:', accessToken);
-    console.log('Refresh Token:', refreshToken);
-    console.log('Google Profile:', profile);
-
+      console.log(accessToken)
     // Proceed with profile
     return done(null, profile);
   })
