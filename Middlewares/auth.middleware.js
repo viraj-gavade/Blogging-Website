@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken'); // Import JSON Web Token library
 const VerifyJwt =async (req, res, next) => {
     try {
         // Get the token from cookies or Authorization header
-        const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ', '');
+        const token = req.cookies?.Token || req.header('Authorization')?.replace('Bearer ', '');
 
         // If no token is found, render the signup page (unauthorized request)
         if (!token) {
