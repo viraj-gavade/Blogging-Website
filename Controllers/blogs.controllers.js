@@ -24,6 +24,7 @@ const PostBlog = async (req,res)=>{
             title:title,
             body:body,
             CoverImageURL:CoverImageURL.url ,
+            AddedBy:req.user._id
         })
         const Blogs = await Blog.find({}).populate('title')
         return res.render('home',{

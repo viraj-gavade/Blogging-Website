@@ -7,7 +7,7 @@ const BlogRouter = express.Router()
 
 
 BlogRouter.route('/addblog')
-.post(upload.single('CoverImageURL'),PostBlog)
+.post(VerifyJwt,upload.single('CoverImageURL'),PostBlog)
 
 BlogRouter.route('/addblog').get((req,res)=>{
     res.render('addBlog',{
