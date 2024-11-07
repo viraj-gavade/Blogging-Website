@@ -16,6 +16,7 @@ const GenerateToken = (user)=>{
 
     return token
 
+    
 }
 
 
