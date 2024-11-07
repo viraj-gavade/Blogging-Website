@@ -35,7 +35,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Use middleware to check the user token
-app.use(checkusertoken('Token'));
+
 
 // Initialize Passport.js
 app.use(passport.initialize());

@@ -31,7 +31,8 @@ const SignInUser = async(req,res)=>{
     try {
     const { email ,password } = req.body
         const token = await USER.matchpasswordAndGenerateToken(email,password)
-        const Blogs = await Blog.find({}).populate('createdBy')
+        console.log('token',token)
+        const Blogs = await Blog.find({})
         console.log(Blogs)
         console.log("User",token)
         
@@ -42,6 +43,7 @@ const SignInUser = async(req,res)=>{
         })
     } catch (error) {
     
+        console.log(error)
     return res.render('signin',{
         error:"Incorrect Email or pasword"
     })
