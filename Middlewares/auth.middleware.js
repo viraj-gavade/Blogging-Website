@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken'); // Import JSON Web Token library
+const USER = require('../Models/users.model')
 // Middleware to verify the JWT token
 const VerifyJwt =async (req, res, next) => {
     try {
@@ -11,10 +12,10 @@ const VerifyJwt =async (req, res, next) => {
         }
 
         // Verify the token using the secret key
-        const decodedtoken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRETE);
+        const decodedtoken = jwt.verify(token, process.env.JWT_SECRETE);
 
         // Find the user from the database using the decoded token's id
-        const user = await findUser(decodedtoken.id);
+        const user = await  USER.findById(decodedtoken._id);
 
         // If user is not found, render the signup page (invalid token)
         if (!user) {
@@ -29,7 +30,7 @@ const VerifyJwt =async (req, res, next) => {
     } catch (error) {
         // Log the error and throw a custom API error for unauthorized access
         console.log(error);
-        throw new CustomApiError(401, error?.message || 'Invalid access');
+        throw new Error('Invalid access');
     }
 };
 

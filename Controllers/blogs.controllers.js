@@ -40,6 +40,7 @@ const PostBlog = async (req,res)=>{
 //Controller that gets all blog post and renders them on the front-end.
 const GetAllBlogs = async (req,res)=>{
     try {
+        console.log(req.user)
         const Blogs = await Blog.find({}).populate('title')
         return res.render('home',{
             user:req.user,

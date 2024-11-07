@@ -37,11 +37,9 @@ const SignInUser = async(req,res)=>{
         console.log("User",token)
         
 
-        return res.cookie('Token',token).render('home',{
-            user:req.user,
-            allblogs:Blogs
-        })
-    } catch (error) {
+        return res.cookie('Token',token).redirect('/api/v1/blog/allBlogs')
+        }
+    catch (error) {
     
         console.log(error)
     return res.render('signin',{
@@ -49,6 +47,7 @@ const SignInUser = async(req,res)=>{
     })
 }
 }
+
 
 //Controller to signout the user
 const SignOut = async (req,res)=>{
