@@ -8,6 +8,8 @@ const Comment = require('../Models/comments.models') // Comment Model
 //Controller that creates the blog post and renders the home page
 const PostBlog = async (req,res)=>{
     try {
+
+        console.log('RQ.USER',req.user)
         const { title , body } = req.body
     
         const CoverImageLocalpath = req.file.path

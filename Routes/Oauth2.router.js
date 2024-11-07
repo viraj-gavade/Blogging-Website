@@ -80,6 +80,7 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
      return res.cookie('token', token).redirect('/api/v1/blog/allBlogs');
     
     }
+    
     const paylod = {
       fullname:Existing_User.fullName,
       _id:Existing_User._id,

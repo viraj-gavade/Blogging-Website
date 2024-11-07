@@ -6,17 +6,13 @@
 </head>
 <body>
     <%- include('./partials/nav') %>
-    <div class="container mt-4 d-flex p-2 flex-wrap">
+    <div class="container mt-4 d-flex p-2 flex-wrap ">
        <% allblogs.forEach(allblog => { %>
-        <div class="card ms-4 mb-4" style="width: 18rem;">
-            <img src="<%= allblog.CoverImageURL %>" class="card-img-top" alt="">
+        <div class="card ms-4 mb-4" style="width: 18rem; ">
+            <img src="<%=allblog.CoverImageURL %>" class="card-img-top" alt="">
             <div class="card-body">
-              <h5 class="card-title"><%= allblog.title %></h5>
-              <p class="card-text">
-                <small>Added by: <strong><%= allblog.AddedBy %></strong></small><br>
-                <small>Date: <%= new Date(allblog.dateAdded).toLocaleDateString() %></small>
-              </p>
-              <a href="/api/v1/blog/<%- allblog._id %>" class="btn btn-primary">View</a>
+              <h5 class="card-title"><%= allblog.title%></h5>
+              <a href="/api/v1/blog/<%- allblog._id %>" class="btn btn-primary">view</a>
             </div>
           </div>
        <% }) %>
