@@ -5,7 +5,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const Blog = require('../Models/blogs.models');
-const User = require('../Models/users.model')
+const USER = require('../Models/users.model')
 
 // Google OAuth strategy configuration
 passport.use(new GoogleStrategy({
@@ -45,6 +45,18 @@ OauthRouter.get('/auth/google/callback', (req, res, next) => {
   (req, res) => {
     console.log('Google OAuth Success - Redirecting to Profile');
     console.log('Logged In User Profile:', req.user); // Log profile after successful authentication
+    
+    const name = req.user.displayName; // Extract the user's display name
+    const Useremail = req.user._json.email; // Extract the user's email
+
+    console.log(`Name: ${name}`); // Log the user's name
+    console.log(`Email: ${Useremail}`); // Log the user's email
+
+    const Existing_User = USER.findOne({email:Useremail})
+    if(!Existing_User){
+      
+    }
+
     res.redirect('/profile');
   }
 );
