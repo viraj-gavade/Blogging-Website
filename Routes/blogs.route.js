@@ -31,7 +31,7 @@ BlogRouter.route('/allBlogs').get(async (req,res)=>{
 })
  
 BlogRouter.route('/:BlogId')
-.get(VerifyJwt,GetSingleBlog)
+.get(GetSingleBlog)
 // .patch(UpdateBlog)
 // .delete(DeleteBlog)    
 
