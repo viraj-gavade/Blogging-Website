@@ -5,9 +5,6 @@ const VerifyJwt = require('../Middlewares/auth.middleware')
 const Blogs = require('../Models/blogs.models')
 const BlogRouter = express.Router()
 
-
-
-
 BlogRouter.route('/addblog')
   .get((req, res) => {
     res.render('addBlog', {
@@ -17,7 +14,7 @@ BlogRouter.route('/addblog')
   .post(VerifyJwt, upload.single('CoverImageURL'), PostBlog);  // Handle the POST request
  
 
-BlogRouter.route('/allBlogs').get(async (req,res)=>{
+BlogRouter.route('/allBlogs').get(VerifyJwt,async (req,res)=>{
     try {
         console.log(req.user)
         const Blog = await Blogs.find({}).populate('title')
@@ -32,9 +29,7 @@ BlogRouter.route('/allBlogs').get(async (req,res)=>{
  
 BlogRouter.route('/:BlogId')
 .get(GetSingleBlog)
-// .patch(UpdateBlog)
-// .delete(DeleteBlog)    
-
+  
 BlogRouter.route('/comment/:BlogId')
 .post(VerifyJwt,createComment)
 
