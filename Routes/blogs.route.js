@@ -31,12 +31,12 @@ BlogRouter.route('/allBlogs').get(async (req,res)=>{
 })
  
 BlogRouter.route('/:BlogId')
-.get(GetSingleBlog)
+.get(VerifyJwt,GetSingleBlog)
 // .patch(UpdateBlog)
 // .delete(DeleteBlog)    
 
 BlogRouter.route('/comment/:BlogId')
-.post(createComment)
+.post(VerifyJwt,createComment)
 
 BlogRouter.route('/allBlogs')
 .get(VerifyJwt, async (req, res) => {

@@ -8,6 +8,7 @@ const Comment = require('../Models/comments.models') // Comment Model
 //Controller that creates the blog post and renders the home page
 const PostBlog = async (req, res) => {
     try {
+        console.log(req.user)
       console.log('RQ.USER', req.user);
       const { title, body } = req.body;
       console.log(req.body);
@@ -28,6 +29,8 @@ const PostBlog = async (req, res) => {
         CoverImageURL: CoverImageURL.url,
         AddedBy: req.user._id,
       });
+      
+      console.log(blog)
   
       const Blogs = await Blog.find({}).populate('title');
       return res.render('home', {
@@ -85,6 +88,7 @@ const GetSingleBlog = async (req,res)=>{
 //Controller that creates a comment on the blog
 const createComment = async ( req,res)=>{
   try {
+    console.log(req.user)
       const { BlogId } = req.params
       const { content } = req.body
       const comment = await Comment.create({
@@ -92,7 +96,9 @@ const createComment = async ( req,res)=>{
           CommentBy:req.user._id,
           CommentOn:BlogId
   
-      })
+        })
+        console.log(comment)
+        
       const Blogs = await Blog.findById(BlogId).populate({
           path: 'title',
           select: 'fullName'  // Specify fields to populate
@@ -100,6 +106,8 @@ const createComment = async ( req,res)=>{
         const AllCommets = await Comment.find({
           CommentOn:BlogId
         })
+
+
       return res.render('blog',{
           user:req.user,
           singleBlog:Blogs,
