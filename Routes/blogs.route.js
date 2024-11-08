@@ -14,7 +14,7 @@ BlogRouter.route('/addblog')
   .post(VerifyJwt, upload.single('CoverImageURL'), PostBlog);  // Handle the POST request
  
 
-BlogRouter.route('/allBlogs').get(VerifyJwt,async (req,res)=>{
+BlogRouter.route('/allBlogs').get(async (req,res)=>{
     try {
         console.log(req.user)
         const Blog = await Blogs.find({}).populate('title')
@@ -33,19 +33,7 @@ BlogRouter.route('/:BlogId')
 BlogRouter.route('/comment/:BlogId')
 .post(VerifyJwt,createComment)
 
-BlogRouter.route('/allBlogs')
-.get(VerifyJwt, async (req, res) => {
-    try {
-        
-        const Blogs = await Blogs.find({})
-        // Render the 'home' page with the fetched data
-        return res.render('home', { allblog:AllBlogs, user });
-    } catch (error) {
-        // Catch and log errors during the process
-        console.error('Error fetching expenses:', error);
-        return res.status(500).send('Internal Server Error'); // Respond with a 500 error if something goes wrong
-    }
-})
+
 
 module.exports={
     BlogRouter 
