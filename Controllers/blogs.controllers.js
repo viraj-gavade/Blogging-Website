@@ -67,12 +67,15 @@ const GetSingleBlog = async (req,res)=>{
    try {
      const { BlogId } = req.params
      const Blogs = await Blog.findById(BlogId).populate({
-         path: 'title',
+         path: 'AddedBy',
          select: 'fullName'  // Specify fields to populate
        })
        const AllCommets = await Comment.find({
          CommentOn:BlogId
-       }).populate('CommentBy')
+       }).populate({
+        path: 'CommentBy',
+        select: 'fullName'  // Specify fields to populate
+      })
      return res.render('blog',{
          user:req.user,
          singleBlog:Blogs,
