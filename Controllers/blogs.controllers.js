@@ -1,7 +1,8 @@
 const upload = require('../Middlewares/multer.middleware') //upload middleware for file uploads
 const Blog = require('../Models/blogs.models')//Blog Model
 const uploadFile = require('../Utils/cloudinary') // Cloudinary Middleware for public URL
-const Comment = require('../Models/comments.models') // Comment Model
+const Comment = require('../Models/comments.models'); // Comment Model
+const asyncHandler = require('../Utils/AsyncHanlder');
 
 
 
@@ -49,7 +50,7 @@ const PostBlog = async (req, res) => {
 
 
 //Controller that gets all blog post and renders them on the front-end.
-const GetAllBlogs = async (req,res)=>{
+const GetAllBlogs = asyncHandler( async (req,res)=>{
     try {
         console.log(req.user)
         const Blogs = await Blog.find({}).populate('title')
@@ -60,10 +61,10 @@ const GetAllBlogs = async (req,res)=>{
     } catch (error) {
         console.log(error)
     }
-}
+})
 
 //Controller that get the single blog and all of its comments to read and renders it with Blog Page
-const GetSingleBlog = async (req,res)=>{
+const GetSingleBlog =  asyncHandler(async (req,res)=>{
    try {
      const { BlogId } = req.params
      const Blogs = await Blog.findById(BlogId).populate({
@@ -85,11 +86,11 @@ const GetSingleBlog = async (req,res)=>{
    } catch (error) {
     console.log(error)
    }
-}
+})
 
 
 //Controller that creates a comment on the blog
-const createComment = async ( req,res)=>{
+const createComment = asyncHandler(async ( req,res)=>{
   try {
     console.log(req.user)
       const { BlogId } = req.params
@@ -119,7 +120,7 @@ const createComment = async ( req,res)=>{
   } catch (error) {
     console.log(error)
   }
-}
+})
 
 
 

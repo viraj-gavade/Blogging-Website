@@ -7,7 +7,6 @@
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            /* padding: 20px; */
             background-color: #f4f4f4;
         }
         .container {
@@ -62,7 +61,7 @@
     <%- include('./partials/nav') %>
     <div class="container mt-4">
         <h1>Create Blog Post</h1>
-        <form action="/api/v1/blog/addblog" method="post" enctype="multipart/form-data">
+        <form id="blogForm" action="/api/v1/blog/addblog" method="post" enctype="multipart/form-data">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required>
 
@@ -70,11 +69,20 @@
             <textarea id="body" name="body" required></textarea>
 
             <label for="coverImage">Cover Image:</label>
-            <input type="file" id="coverImage" name="CoverImageURL" accept="image/*">
+            <input type="file" id="coverImage" name="CoverImageURL" accept="image/*" required>
 
             <button type="submit">Create Post</button>
         </form>
     </div>
+    <script>
+        document.getElementById('blogForm').addEventListener('submit', function(event) {
+            const coverImage = document.getElementById('coverImage').files[0];
+            if (!coverImage) {
+                alert("Please upload a cover image.");
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    </script>
     <%- include('./partials/script') %>
 </body>
 </html>

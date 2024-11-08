@@ -1,6 +1,7 @@
 const USER = require('../Models/users.model')
 const mongoose = require('mongoose')
 const Blog = require('../Models/blogs.models')
+const asyncHandler = require('../Utils/AsyncHanlder')
 
 
 //Controller that sign ups the user with Email Password and FullName.
@@ -27,7 +28,7 @@ const SignUpUser = async (req,res)=>{
 }
 
 //Controller that signins user with email and password
-const SignInUser = async(req,res)=>{ 
+const SignInUser =asyncHandler( async(req,res)=>{ 
     try {
     const { email ,password } = req.body
         const token = await USER.matchpasswordAndGenerateToken(email,password)
@@ -46,18 +47,18 @@ const SignInUser = async(req,res)=>{
         error:"Incorrect Email or pasword"
     })
 }
-}
+})
 
 
 //Controller to signout the user
-const SignOut = async (req,res)=>{
+const SignOut = asyncHandler(async (req,res)=>{
    try {
     return  res.clearCookie('Token').redirect('/api/v1/user/signup')
 
    } catch (error) {
     console.log(error)
    }
-}  
+}  )
 module.exports ={
     SignUpUser,
     SignInUser,
