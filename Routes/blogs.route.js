@@ -6,14 +6,16 @@ const Blogs = require('../Models/blogs.models')
 const BlogRouter = express.Router()
 
 
-BlogRouter.route('/addblog')
-.post(VerifyJwt,upload.single('CoverImageURL'),PostBlog)
 
-BlogRouter.route('/addblog').get((req,res)=>{
-    res.render('addBlog',{
-        user:req.user
-    })
-})    
+
+BlogRouter.route('/addblog')
+  .get((req, res) => {
+    res.render('addBlog', {
+      user: req.user  
+    });
+  })
+  .post(VerifyJwt, upload.single('CoverImageURL'), PostBlog);  // Handle the POST request
+ 
 
 BlogRouter.route('/allBlogs').get(async (req,res)=>{
     try {

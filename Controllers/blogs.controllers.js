@@ -6,38 +6,43 @@ const Comment = require('../Models/comments.models') // Comment Model
 
 
 //Controller that creates the blog post and renders the home page
-const PostBlog = async (req,res)=>{
+const PostBlog = async (req, res) => {
     try {
-
-        console.log('RQ.USER',req.user)
-        const { title , body } = req.body
-    
-        const CoverImageLocalpath = req.file.path
-        if(!CoverImageLocalpath){
-            throw new Error('Cover image localpath not found!')
-        }
-    
-        const CoverImageURL = await uploadFile(CoverImageLocalpath)
-        if(!CoverImageURL.url){
-            throw new Error('Something went wrong while uploading file on cloudinary!')
-    
-        }
-        const blog = await Blog.create({
-            title:title,
-            body:body,
-            CoverImageURL:CoverImageURL.url ,
-            AddedBy:req.user._id
-        })
-        const Blogs = await Blog.find({}).populate('title')
-        return res.render('home',{
-            user:req.user,
-            allblogs:Blogs
-        })
+      console.log('RQ.USER', req.user);
+      const { title, body } = req.body;
+      console.log(req.body);
+  
+      const CoverImageLocalpath = req.file.path;
+      if (!CoverImageLocalpath) {
+        throw new Error('Cover image localpath not found!');
+      }
+  
+      const CoverImageURL = await uploadFile(CoverImageLocalpath);
+      if (!CoverImageURL.url) {
+        throw new Error('Something went wrong while uploading file to Cloudinary!');
+      }
+  
+      const blog = await Blog.create({
+        title: title,
+        body: body,
+        CoverImageURL: CoverImageURL.url,
+        AddedBy: req.user._id,
+      });
+  
+      const Blogs = await Blog.find({}).populate('title');
+      return res.render('home', {
+        user: req.user,
+        allblogs: Blogs,
+      });
     } catch (error) {
-        
-        console.log(error)
+      console.log(error);
+      return res.render('addBlog', { 
+        user: req.user, 
+        errorMessage: error.message || 'An error occurred while adding the blog.' 
+      });
     }
-}
+  };
+  
 
 
 //Controller that gets all blog post and renders them on the front-end.

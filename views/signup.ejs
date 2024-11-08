@@ -108,15 +108,16 @@
     <form class="form" method="post" action="/api/v1/user/signup">
        <p class="form-title">Create your account</p>
         <div class="input-container">
-          <input type="email" placeholder="Enter email" name="email">
+          <input type="email" placeholder="Enter email" name="email" autocomplete="email">
           <span></span>
         </div>
         <div class="input-container">
-          <input type="text" placeholder="Enter fullname" name="fullName">
+          <input type="text" placeholder="Enter fullname" name="fullName " autocomplete="additional-name">
           <span></span>
         </div>
         <div class="input-container">
-          <input type="password" placeholder="Create password" name="password">
+          <input type="password" name="password" autocomplete="new-password" placeholder="Create a password" required>
+
         </div>
          <button type="submit" class="submit">
         Sign up
