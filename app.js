@@ -43,7 +43,7 @@ app.use(passport.session());
 
 // Define routes
 app.get('/', async (req, res) => {
-    const Blogs = await Blog.find({}).populate('createdBy');
+    const Blogs = await Blog.find({}).populate('AddedBy');
     res.render('home', {
         user: req.user,
         allblogs: Blogs

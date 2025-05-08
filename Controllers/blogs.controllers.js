@@ -71,6 +71,7 @@ const GetSingleBlog =  asyncHandler(async (req,res)=>{
          path: 'AddedBy',
          select: 'fullName'  // Specify fields to populate
        })
+       console.log(Blogs)
        const AllCommets = await Comment.find({
          CommentOn:BlogId
        }).populate({
