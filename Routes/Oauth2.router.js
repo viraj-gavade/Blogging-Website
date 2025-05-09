@@ -62,30 +62,30 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
         fullName:fullName,
         password:"Auth2-Login",
         email:Useremail,
-    })
-     console.log(user)
-     const paylod = {
-      fullname:user.fullName,
-      _id:user._id,
-      email:user.email,
-      password:user.password,
-      profileImageURL:user.profileImageURL,
-      Role:user.role
-  }
+      })
+      console.log(user)
+      const paylod = {
+        fullname:user.fullName,
+        _id:user._id,
+        email:user.email,
+        password:user.password,
+        profileImageURL:user.profileImageURL,
+        Role:user.role
+      }
 
-  const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
-      expiresIn:process.env.JWT_EXPIRY
-  })
-     console.log("Generated token for new user:", token)
+      const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
+        expiresIn:process.env.JWT_EXPIRY
+      })
+      console.log("Generated token for new user:", token)
      
-     // Set cookie with proper options
-     return res.cookie('token', token, {
-       httpOnly: true,
-       maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
-       path: '/',
-       sameSite: 'lax', // Helps with cross-site requests
-       // secure: true, // Uncomment this in production with HTTPS
-     }).redirect('/api/v1/blog/allBlogs');
+      // Set cookie with proper options - USING CONSISTENT COOKIE NAME 'Token' (same as in signin.js)
+      return res.cookie('Token', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+        path: '/',
+        sameSite: 'lax', // Helps with cross-site requests
+        // secure: true, // Uncomment this in production with HTTPS
+      }).redirect('/api/v1/blog/allBlogs');
     
     }
     
@@ -97,15 +97,15 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
       password:Existing_User.password,
       profileImageURL:Existing_User.profileImageURL,
       Role:Existing_User.role
-  }
+    }
 
-  const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
+    const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
       expiresIn:process.env.JWT_EXPIRY
-  })
+    })
     console.log("Generated token for existing user:", token)
     
-    // Set cookie with consistent options
-    return res.cookie('token', token, {
+    // Set cookie with consistent options - USING CONSISTENT COOKIE NAME 'Token' (same as in signin.js)
+    return res.cookie('Token', token, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
       path: '/',
@@ -118,6 +118,27 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
 // Debug route
 OauthRouter.get('/signin', (req, res) => {
   res.send("Debug Statement");
+});
+
+// Add debug route to check authentication state
+OauthRouter.get('/auth/check', (req, res) => {
+  const token = req.cookies.Token;
+  if (token) {
+    try {
+      const decoded = JWT.verify(token, process.env.JWT_SECRETE);
+      res.json({
+        authenticated: true,
+        user: {
+          name: decoded.fullname,
+          email: decoded.email
+        }
+      });
+    } catch (error) {
+      res.json({ authenticated: false, error: 'Invalid token' });
+    }
+  } else {
+    res.json({ authenticated: false, error: 'No token found' });
+  }
 });
 
 // Protected profile route

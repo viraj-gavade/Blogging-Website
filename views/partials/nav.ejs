@@ -6,8 +6,16 @@
   
   <div class="navbar-links">
     <a href="/" class="nav-link">Home</a>
-    <a href="/api/v1/user/signup" class="nav-link">Create Account</a>
-    <a href="/api/v1/user/signin" class="btn-primary">Sign In</a>
+    
+    <% if (locals.user) { %>
+      <!-- Show these links when user is logged in -->
+      <a href="/api/v1/blog/addblog" class="nav-link">Create Blog</a>
+      <a href="/api/v1/user/signout" class="btn-primary">Sign Out</a>
+    <% } else { %>
+      <!-- Show these links when user is not logged in -->
+      <a href="/api/v1/user/signup" class="nav-link">Create Account</a>
+      <a href="/api/v1/user/signin" class="btn-primary">Sign In</a>
+    <% } %>
   </div>
   
   <button class="mobile-menu-btn">

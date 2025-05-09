@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken'); // Import JSON Web Token library
 const USER = require('../Models/users.model')
 // Middleware to verify the JWT token
-const VerifyJwt =async (req, res, next) => {
+const VerifyJwt = async (req, res, next) => {
     try {
-        // Get the token from cookies or Authorization header
-        const token = req.cookies?.token || req.header('Authorization')?.replace('Bearer ', '');
+        // Get the token from cookies - FIXED: Use 'Token' consistently (not 'token')
+        const token = req.cookies?.Token || req.header('Authorization')?.replace('Bearer ', '');
 
         // If no token is found, render the signup page (unauthorized request)
         if (!token) {
@@ -15,8 +15,9 @@ const VerifyJwt =async (req, res, next) => {
         const decodedtoken = jwt.verify(token, process.env.JWT_SECRETE);
 
         // Find the user from the database using the decoded token's id
-        const user = await  USER.findById(decodedtoken._id);
-        conosole.log('user',user)
+        const user = await USER.findById(decodedtoken._id);
+        // Fixed typo in console.log
+        console.log('user', user);
 
         // If user is not found, render the signup page (invalid token)
         if (!user) {
