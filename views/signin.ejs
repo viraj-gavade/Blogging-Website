@@ -30,9 +30,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2rem 1rem;
-            min-height: calc(100vh - 70px - 4rem);
-            margin-top: 2rem; /* Add margin to prevent header overlap */
+            padding: 1.5rem 1rem;
+            min-height: calc(100vh - 60px); /* Adjusted for new navbar height */
         }
 
         .form {
@@ -44,6 +43,7 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: fadeIn 0.6s ease-out;
+            margin-top: 0; /* Ensure no extra top margin */
         }
 
         @keyframes fadeIn {
@@ -58,11 +58,11 @@
         }
 
         .form-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.25rem;
+            font-weight: 600;
             text-align: center;
             color: var(--text-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .input-container {
@@ -285,7 +285,7 @@
     
     <div class="container">
         <form class="form" method="post" action="/api/v1/user/signin">
-            <h1 class="form-title">Welcome Back</h1>
+            <h2 class="form-title">Welcome Back</h2>
             
             <div class="input-container">
                 <input type="email" placeholder="Email address" name="email" required>

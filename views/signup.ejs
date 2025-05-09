@@ -31,8 +31,7 @@
             justify-content: center;
             align-items: center;
             padding: 2rem 1rem;
-            min-height: calc(100vh - 70px - 4rem);
-            margin-top: 2rem; /* Add margin to prevent header overlap */
+            min-height: calc(100vh - 70px - 4rem); /* Adjusted for new navbar height */
         }
 
         .form {
@@ -44,8 +43,9 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: fadeIn 0.6s ease-out;
+            margin-top: 0; /* Ensure no extra top margin */
         }
-
+        
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -56,20 +56,20 @@
                 transform: translateY(0);
             }
         }
-
+        
         .form-title {
             font-size: 1.5rem;
             font-weight: 700;
             text-align: center;
             color: var(--text-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
-
+        
         .input-container {
             position: relative;
             margin-bottom: 1.25rem;
         }
-
+        
         .input-container input {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -81,17 +81,17 @@
             box-sizing: border-box;
             color: var(--text-color);
         }
-
+        
         .input-container input:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
             outline: none;
         }
-
+        
         .input-container input::placeholder {
             color: var(--light-text);
         }
-
+        
         .submit {
             display: block;
             width: 100%;
@@ -108,36 +108,36 @@
             text-transform: none;
             letter-spacing: 0.5px;
         }
-
+        
         .submit:hover {
             background-color: var(--primary-hover);
             transform: translateY(-1px);
         }
-
+        
         .submit:active {
             transform: translateY(1px);
         }
-
+        
         .divider {
             display: flex;
             align-items: center;
             text-align: center;
             margin: 1.5rem 0;
         }
-
+        
         .divider::before,
         .divider::after {
             content: '';
             flex: 1;
             border-bottom: 1px solid var(--border-color);
         }
-
+        
         .divider span {
             padding: 0 10px;
             font-size: 0.875rem;
-            color: var (--light-text);
+            color: var(--light-text);
         }
-
+        
         .google-btn {
             display: flex;
             justify-content: center;
@@ -157,22 +157,22 @@
             text-transform: none;
             letter-spacing: 0.2px;
         }
-
+        
         .google-btn:hover {
             background-color: #f8f9fa;
             transform: translateY(-1px);
         }
-
+        
         .google-btn:active {
             transform: translateY(1px);
         }
-
+        
         .google-icon {
             margin-right: 0.75rem;
             height: 1.25rem;
             width: 1.25rem;
         }
-
+        
         .signup-link {
             color: var(--light-text);
             font-size: 0.95rem;
@@ -180,19 +180,19 @@
             margin-top: 1.5rem;
             margin-bottom: 0;
         }
-
+        
         .signup-link a {
             color: var(--primary-color);
             font-weight: 600;
             text-decoration: none;
             transition: color 0.2s ease;
         }
-
+        
         .signup-link a:hover {
             color: var(--primary-hover);
             text-decoration: underline;
         }
-
+        
         /* Toast Notification */
         .toast-container {
             position: fixed;
@@ -201,7 +201,7 @@
             max-width: 350px;
             z-index: 1000;
         }
-
+        
         .toast {
             padding: 1rem;
             border-radius: 8px;
@@ -211,29 +211,29 @@
             align-items: center;
             animation: slideIn 0.3s ease-out forwards;
         }
-
+        
         .toast-error {
             background-color: #fef2f2;
-            border-left: 4px solid var(--error-color);
+            border-left: 4px solid var (--error-color);
             color: #991b1b;
         }
-
+        
         .toast-success {
             background-color: #f0fdf4;
             border-left: 4px solid var(--success-color);
             color: #166534;
         }
-
+        
         .toast-icon {
             margin-right: 0.75rem;
             font-size: 1.25rem;
         }
-
+        
         .toast-message {
             font-size: 0.95rem;
             flex-grow: 1;
         }
-
+        
         .toast-close {
             background: transparent;
             border: none;
@@ -245,11 +245,11 @@
             opacity: 0.7;
             transition: opacity 0.2s;
         }
-
+        
         .toast-close:hover {
             opacity: 1;
         }
-
+        
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -260,7 +260,7 @@
                 opacity: 1;
             }
         }
-
+        
         /* Responsive adjustments */
         @media (max-width: 480px) {
             .container {
@@ -306,20 +306,20 @@
             <div class="divider">
                 <span>OR</span>
             </div>
-
+            
             <!-- Google Sign Up Button -->
             <a href="/auth/google" class="google-btn">
                 <img src="https://img.icons8.com/color/24/000000/google-logo.png" class="google-icon" alt="Google Icon" />
                 Continue with Google
             </a>
-
+            
             <p class="signup-link">
                 Already have an account?
                 <a href="/api/v1/user/signin">Sign in</a>
             </p>
         </form>
     </div>
-
+    
     <!-- Toast container for notifications -->
     <% if (typeof error !== 'undefined' && error) { %>
     <div class="toast-container">
@@ -330,7 +330,7 @@
         </div>
     </div>
     <% } %>
-
+    
     <% if (typeof success !== 'undefined' && success) { %>
     <div class="toast-container">
         <div class="toast toast-success">
@@ -340,7 +340,7 @@
         </div>
     </div>
     <% } %>
-
+    
     <script>
         // Auto-dismiss toast after 5 seconds
         document.addEventListener('DOMContentLoaded', function() {
@@ -356,7 +356,7 @@
             });
         });
     </script>
-
+    
     <%- include('./partials/script') %>
 </body>
 </html>
