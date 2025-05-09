@@ -43,7 +43,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Define routes
-app.get('/', VerifyJwt, async (req, res) => {
+app.get('/', async (req, res) => {
     console.log(req.user);
     const Blogs = await Blog.find({}).populate('AddedBy');
     res.render('home', {
