@@ -76,11 +76,20 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
   const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
       expiresIn:process.env.JWT_EXPIRY
   })
-     console.log(token)
-     return res.cookie('token', token).redirect('/api/v1/blog/allBlogs');
+     console.log("Generated token for new user:", token)
+     
+     // Set cookie with proper options
+     return res.cookie('token', token, {
+       httpOnly: true,
+       maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+       path: '/',
+       sameSite: 'lax', // Helps with cross-site requests
+       // secure: true, // Uncomment this in production with HTTPS
+     }).redirect('/api/v1/blog/allBlogs');
     
     }
     
+    // For existing user
     const paylod = {
       fullname:Existing_User.fullName,
       _id:Existing_User._id,
@@ -93,8 +102,16 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
   const token = JWT.sign(paylod,process.env.JWT_SECRETE,{
       expiresIn:process.env.JWT_EXPIRY
   })
-    console.log(token)
-    return res.cookie('token', token).redirect('/api/v1/blog/allBlogs');
+    console.log("Generated token for existing user:", token)
+    
+    // Set cookie with consistent options
+    return res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+      path: '/',
+      sameSite: 'lax', // Helps with cross-site requests
+      // secure: true, // Uncomment this in production with HTTPS
+    }).redirect('/api/v1/blog/allBlogs');
   }
 );
 

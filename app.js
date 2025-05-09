@@ -16,7 +16,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Query } = require('mongoose');
 const USER = require('./Models/users.model')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const VerifyJwt = require('./Middlewares/auth.middleware');
 // Create an express app
 const app = express()
 
@@ -42,7 +43,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Define routes
-app.get('/', async (req, res) => {
+app.get('/', VerifyJwt, async (req, res) => {
+    console.log(req.user);
     const Blogs = await Blog.find({}).populate('AddedBy');
     res.render('home', {
         user: req.user,

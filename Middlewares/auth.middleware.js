@@ -16,6 +16,7 @@ const VerifyJwt =async (req, res, next) => {
 
         // Find the user from the database using the decoded token's id
         const user = await  USER.findById(decodedtoken._id);
+        conosole.log('user',user)
 
         // If user is not found, render the signup page (invalid token)
         if (!user) {
