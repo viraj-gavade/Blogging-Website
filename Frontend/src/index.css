@@ -1,12 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -14,20 +11,15 @@
 }
 
 a {
+  @apply text-primary-600 hover:text-primary-700;
   font-weight: 500;
-  color: #646cff;
   text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 h1 {
@@ -64,5 +56,57 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+/* Custom utility classes */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded font-medium transition duration-200 ease-in-out;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-600 hover:bg-secondary-700 text-white;
+  }
+  
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Add line clamp utilities if not using the line-clamp plugin */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  /* Additional blog card specific styles */
+  .blog-card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300;
+  }
+  
+  .blog-card:hover {
+    @apply shadow-lg transform translate-y-[-4px];
+  }
+  
+  .blog-tag {
+    @apply px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full inline-block;
+  }
+
+  /* Additional navbar styles matching EJS version */
+  .navbar-links.active {
+    @apply flex flex-col absolute top-16 left-0 right-0 bg-gray-900 p-4 z-50;
   }
 }
