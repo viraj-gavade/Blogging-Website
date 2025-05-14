@@ -28,25 +28,29 @@ const SignUpUser = async (req,res)=>{
 }
 
 //Controller that signins user with email and password
-const SignInUser =asyncHandler( async(req,res)=>{ 
+const SignInUser = asyncHandler(async(req, res) => { 
     try {
-    const { email ,password } = req.body
-        const token = await USER.matchpasswordAndGenerateToken(email,password)
-        console.log('token',token)
+        const { email, password } = req.body
+        const token = await USER.matchpasswordAndGenerateToken(email, password)
+        console.log('Generated token for signin:', token)
         const Blogs = await Blog.find({})
-        console.log(Blogs)
-        console.log("User",token)
+        console.log("User blogs:", Blogs.length)
         
-
-        return res.cookie('Token',token).redirect('/api/v1/blog/allBlogs')
-        }
+        // Set cookie with proper options consistent with OAuth implementation
+        return res.cookie('Token', token, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+            path: '/',
+            sameSite: 'lax', // Helps with cross-site requests
+            // secure: true, // Uncomment in production with HTTPS
+        }).redirect('/api/v1/blog/allBlogs')
+    }
     catch (error) {
-    
-        console.log(error)
-    return res.render('signin',{
-        error:"Incorrect Email or pasword"
-    })
-}
+        console.log("Error in sign in:", error)
+        return res.render('signin', {
+            error: "Incorrect Email or password"
+        })
+    }
 })
 
 
