@@ -163,7 +163,7 @@ const BlogDetailPage = () => {
 
   return (
 <>
-      <Navbar />
+      
     <div className="w-full max-w-3xl mx-auto px-4 my-8 md:my-16 animate__animated animate__fadeIn">
     
       <article className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-lg shadow-md mb-8">
@@ -207,7 +207,7 @@ const BlogDetailPage = () => {
                 <p className="mb-3 text-gray-800 dark:text-gray-200">{comment.content}</p>
                 {isLoggedIn && isCommentOwner(comment) && (
                   <button
-                    onClick={() => handleDeleteComment(comment.id)}
+                    onClick={() => handleDeleteComment(comment._id)}
                     className="text-red-500 hover:text-red-700 ml-2"
                     title="Delete comment"
                   >

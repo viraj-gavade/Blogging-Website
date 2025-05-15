@@ -58,10 +58,27 @@ app.use(passport.session());
 app.use('/api/v1/user', UserRouter);
 app.use('/api/v1/blog', BlogRouter);
 
-// OAuth Router
-app.use('/google', OauthRouter);
+// OAuth Router - Fix: Mount the entire router, not just a single route
+app.use('/', OauthRouter);  // This makes /auth/google available
 
-
+// Improved production setup for serving the frontend
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React app build directory
+  const frontendBuildPath = path.join(__dirname, '../Frontend/dist');
+  app.use(express.static(frontendBuildPath));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res, next) => {
+    // Skip API routes
+    if (req.path.startsWith('/api') || 
+        req.path.startsWith('/v1') || 
+        req.path.startsWith('/auth') || 
+        req.path.startsWith('/graphql')) {
+      return next();
+    }
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+}
 
 // Connect to the database
 const connectdb = async () => {

@@ -28,44 +28,31 @@ export const AuthProvider = ({ children }) => {
         const storedStatus = localStorage.getItem('isLoggedIn') === 'true';
         if (storedStatus) {
           setIsLoggedIn(true);
-          console.log("Auth: User logged in from local storage");
         }
         
         // Then verify with the server
-        console.log("Auth: Checking with server...");
         const response = await fetch('/api/v1/user/check-auth', {
-          credentials: 'include',
+          credentials: 'include', // Important for cookies
           headers: {
             'Accept': 'application/json',
-            'Cache-Control': 'no-cache, no-store',
-            'Pragma': 'no-cache'
+            'Cache-Control': 'no-cache, no-store'
           }
         });
         
-        console.log("Auth: Server responded with status:", response.status);
-        
         if (response.ok) {
           const data = await response.json();
-          console.log("Auth: Server data:", data);
-          
           if (data.isAuthenticated) {
             setIsLoggedIn(true);
             setUser(data.user);
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('user', JSON.stringify(data.user));
-            console.log("Auth: Authenticated by server");
           } else {
             // Only clear if server explicitly says not authenticated
-            console.log("Auth: Server says not authenticated");
             setIsLoggedIn(false);
             setUser(null);
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('user');
           }
-        } else {
-          console.log("Auth: Server response not OK");
-          // Keep using the localStorage value if server check fails
-          // This prevents logout on server issues
         }
       } catch (error) {
         console.error('Auth check error:', error);
@@ -74,7 +61,6 @@ export const AuthProvider = ({ children }) => {
       } finally {
         setIsLoading(false);
         setAuthChecked(true);
-        console.log("Auth: Check completed, isLoggedIn =", isLoggedIn);
       }
     };
     
@@ -97,62 +83,33 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Clear state first to ensure UI updates immediately
-      setIsLoggedIn(false);
-      setUser(null);
-      
-      // Clear localStorage
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('user');
-      
       // Call the signout endpoint
-      console.log("Logging out...");
       const response = await fetch('/api/v1/user/signout', {
         method: 'GET',
         credentials: 'include'
       });
       
+      // Clear state first to ensure UI updates immediately
+      setIsLoggedIn(false);
+      setUser(null);
+      
+      // Then clear localStorage
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('user');
+      
       if (response.ok) {
-        console.log('Logout API call successful');
-      } else {
-        console.warn('Logout API call failed, but local state cleared');
+        console.log('Logout successful');
       }
     } catch (error) {
       console.error('Logout error:', error);
-      // State already cleared above
+      
+      // Even if request fails, clear local state anyway
+      setIsLoggedIn(false);
+      setUser(null);
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('user');
     }
   };
-
-  // This component acts as a fallback in case the AuthContext gets stuck
-  if (isLoading && Date.now() - window.performance.timeOrigin > 5000) {
-    // If loading for more than 5 seconds, show a recovery option
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-        <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-          <h2 className="text-xl font-bold mb-4">Loading taking too long...</h2>
-          <p className="mb-4">Authentication check seems to be stuck. You can try:</p>
-          <div className="flex justify-end space-x-2">
-            <button 
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Reload Page
-            </button>
-            <button 
-              onClick={() => {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('user');
-                window.location.href = '/user/signin';
-              }}
-              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              Reset & Sign In
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <AuthContext.Provider value={{ 

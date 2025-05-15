@@ -68,7 +68,7 @@ const Navbar = () => {
       
       {/* Mobile menu button */}
       <button 
-        className="md:hidden text-white focus:outline-none"
+        className="md:hidden text-black focus:outline-none"
         onClick={(e) => {
           e.stopPropagation();
           toggleMobileMenu();

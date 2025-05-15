@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import BlogList from './components/BlogList';
@@ -8,6 +8,9 @@ import CreateBlogPage from './pages/CreateBlogPage';
 import SignupPage from './pages/SignupPage';
 import SigninPage from './pages/SigninPage';
 import ErrorBoundary from './components/ErrorBoundary';
+// Import ToastContainer at the app level
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Wrap routes that require authentication
 const ProtectedRoute = ({ children }) => {
@@ -26,7 +29,46 @@ const ProtectedRoute = ({ children }) => {
 
 // Main app without AuthProvider to use useAuth hook
 function AppContent() {
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoggedIn, isLoading, login } = useAuth();
+  
+  // Handle returning from Google OAuth
+  useEffect(() => {
+    const isGoogleAuthInProgress = localStorage.getItem('googleAuthInProgress') === 'true';
+    
+    if (isGoogleAuthInProgress) {
+      // Clear the flag
+      localStorage.removeItem('googleAuthInProgress');
+      
+      // Check if we're now logged in
+      const checkAuthAfterGoogleLogin = async () => {
+        try {
+          const response = await fetch('/auth/check', {
+            credentials: 'include',
+            headers: { 'Accept': 'application/json' }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.authenticated) {
+              // Update auth context
+              login({
+                id: data.user._id,
+                fullName: data.user.name,
+                email: data.user.email
+              });
+              
+              // Show success toast
+              toast.success('Successfully signed in with Google');
+            }
+          }
+        } catch (error) {
+          console.error('Error checking auth after Google login', error);
+        }
+      };
+      
+      checkAuthAfterGoogleLogin();
+    }
+  }, [login]);
   
   // Show a loading spinner while checking auth
   if (isLoading) {
@@ -57,7 +99,7 @@ function AppContent() {
               </main>
             </>
           } />
-          <Route path="/blog/:id" element={
+          <Route path="/api/v1/blog/:id" element={
             <>
               <Navbar />
               <BlogDetailPage />
@@ -86,6 +128,18 @@ function AppContent() {
             )
           } />
         </Routes>
+        {/* Add a single ToastContainer at the app level */}
+        <ToastContainer 
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </Router>
   );

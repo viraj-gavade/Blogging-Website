@@ -1,27 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { useAuth } from '../AuthContext';
 
 const GoogleAuthButton = ({ text }) => {
-  const handleGoogleAuth = async () => {
+  const handleGoogleAuth = () => {
+    // For OAuth redirects, we need to use window.location.href instead of fetch
+    // OAuth requires a full page navigation, not an AJAX request
     try {
-      // Redirect to Google OAuth endpoint in your backend
-      const response = await fetch('/google', {
-        headers: {
-          'Accept': 'application/json'
-        },
-        credentials: 'include'
-      });
+      // Set a flag to indicate Google auth is in progress
+      localStorage.setItem('googleAuthInProgress', 'true');
       
-      // If the response is JSON, we'll handle it
-      if (response.headers.get('content-type')?.includes('application/json')) {
-        const data = await response.json();
-        // Handle the response data here
-        console.log(data);
-      } else {
-        // If response is not JSON, it's likely a redirect to Google OAuth
-        window.location.href = '/google';
-      }
+      // Redirect to the correct Google OAuth endpoint
+      window.location.href = '/auth/google';
     } catch (error) {
       console.error('Error initiating Google auth:', error);
     }

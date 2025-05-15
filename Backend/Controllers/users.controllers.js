@@ -9,17 +9,10 @@ const SignUpUser = async (req, res) => {
      const { fullName, email, password } = req.body
      console.log(req.body)
      if(!fullName || !email || !password) {
-         // Check if request expects JSON
-         if (req.headers.accept && req.headers.accept.includes('application/json')) {
-             return res.status(400).json({
-                 success: false,
-                 message: "Please provide all the required fields!"
-             });
-         }
-         return res.status(401).json({
-             status: "OK",
+         return res.status(400).json({
+             success: false,
              message: "Please provide all the required fields!"
-         })
+         });
      }
  
      const user = await USER.create({
@@ -28,33 +21,23 @@ const SignUpUser = async (req, res) => {
          email: email,
      })
 
-     // Return JSON for API requests
-     if (req.headers.accept && req.headers.accept.includes('application/json')) {
-         return res.status(201).json({
-             success: true,
-             message: "Account created successfully",
-             user: {
-                 id: user._id,
-                 fullName: user.fullName,
-                 email: user.email
-             }
-         });
-     }
-     
-     return res.render('signin')
+     return res.status(201).json({
+         success: true,
+         message: "Account created successfully",
+         user: {
+             id: user._id,
+             fullName: user.fullName,
+             email: user.email
+         }
+     });
    } catch (error) {
     console.log(error)
     
-    // Return JSON for API requests
-    if (req.headers.accept && req.headers.accept.includes('application/json')) {
-        return res.status(500).json({
-            success: false,
-            message: "Failed to create account",
-            error: error.message
-        });
-    }
-    
-    res.status(500).render('error', { message: 'Failed to create account' });
+    return res.status(500).json({
+        success: false,
+        message: "Failed to create account",
+        error: error.message
+    });
    }
 }
 
@@ -64,13 +47,14 @@ const SignInUser = asyncHandler(async(req, res) => {
         const { email, password } = req.body
         const token = await USER.matchpasswordAndGenerateToken(email, password)
         console.log('Generated token for signin:', token)
-        const Blogs = await Blog.find({})
-        console.log("User blogs:", Blogs.length)
         
         // Find user info
         const user = await USER.findOne({ email });
         if (!user) {
-            throw new Error("User not found");
+            return res.status(401).json({
+                success: false,
+                message: "User not found"
+            });
         }
         
         // Set cookie
@@ -82,35 +66,23 @@ const SignInUser = asyncHandler(async(req, res) => {
             // secure: true, // Uncomment in production with HTTPS
         });
         
-        // Return JSON for API requests
-        if (req.headers.accept && req.headers.accept.includes('application/json')) {
-            return res.status(200).json({
-                success: true,
-                message: "Login successful",
-                user: {
-                    id: user._id,
-                    fullName: user.fullName,
-                    email: user.email
-                }
-            });
-        }
-        
-        return res.redirect('/api/v1/blog/allBlogs')
+        return res.status(200).json({
+            success: true,
+            message: "Login successful",
+            user: {
+                id: user._id,
+                fullName: user.fullName,
+                email: user.email
+            }
+        });
     }
     catch (error) {
         console.log("Error in sign in:", error)
         
-        // Return JSON for API requests
-        if (req.headers.accept && req.headers.accept.includes('application/json')) {
-            return res.status(401).json({
-                success: false,
-                message: "Incorrect email or password"
-            });
-        }
-        
-        return res.render('signin', {
-            error: "Incorrect Email or password"
-        })
+        return res.status(401).json({
+            success: false,
+            message: "Incorrect email or password"
+        });
     }
 })
 
@@ -119,35 +91,51 @@ const SignOut = asyncHandler(async (req, res) => {
    try {
        res.clearCookie('Token');
        
-       // Return JSON for API requests
-       if (req.headers.accept && req.headers.accept.includes('application/json')) {
-           return res.status(200).json({
-               success: true,
-               message: "Logged out successfully"
-           });
-       }
-       
-       return res.redirect('/api/v1/user/signup')
+       return res.status(200).json({
+           success: true,
+           message: "Logged out successfully",
+           redirectUrl: "/user/signin"
+       });
    } catch (error) {
        console.log(error)
        
-       // Return JSON for API requests
-       if (req.headers.accept && req.headers.accept.includes('application/json')) {
-           return res.status(500).json({
-               success: false,
-               message: "Failed to log out"
-           });
-       }
-       
-       res.status(500).render('error', { message: 'Failed to log out' });
+       return res.status(500).json({
+           success: false,
+           message: "Failed to log out"
+       });
    }
 })
 
 // Controller to check authentication status
-
+const CheckAuthStatus = asyncHandler(async (req, res) => {
+    try {
+        if (req.user) {
+            return res.status(200).json({
+                isAuthenticated: true,
+                user: {
+                    id: req.user._id,
+                    fullName: req.user.fullName,
+                    email: req.user.email
+                }
+            });
+        }
+        
+        return res.status(200).json({
+            isAuthenticated: false,
+            message: "User not authenticated"
+        });
+    } catch (error) {
+        console.error('Auth check error:', error);
+        return res.status(500).json({
+            isAuthenticated: false,
+            message: "Error checking authentication status"
+        });
+    }
+});
 
 module.exports = {
     SignUpUser,
     SignInUser,
     SignOut,
+    CheckAuthStatus
 }

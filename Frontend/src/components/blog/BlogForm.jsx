@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify'; // Only import toast function, not ToastContainer
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
@@ -136,8 +136,6 @@ const BlogForm = () => {
           </button>
         </form>
       </div>
-      
-      <ToastContainer position="bottom-right" />
     </div>
   );
 };

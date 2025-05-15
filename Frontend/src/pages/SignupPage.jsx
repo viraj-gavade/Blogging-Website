@@ -53,14 +53,16 @@ const SignupPage = () => {
         })
       });
 
-      if (!response.created) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create account');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to create account');
       }
 
+      // Show success message
       toast.success('Account created successfully! Please sign in.');
       
-      // Redirect to signin page after successful signup
+      // Redirect after a short delay to ensure the toast is visible
       setTimeout(() => {
         navigate('/user/signin');
       }, 2000);
@@ -75,7 +77,7 @@ const SignupPage = () => {
 
   return (
     <>
-      <Navbar />
+     
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 animate__animated animate__fadeIn">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

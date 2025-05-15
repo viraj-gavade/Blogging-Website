@@ -1,5 +1,5 @@
 const express = require('express')
-const { PostBlog,GetAllBlogs ,GetSingleBlog,createComment} = require('../Controllers/blogs.controllers')
+const { PostBlog,GetAllBlogs ,GetSingleBlog,createComment,deleteComment} = require('../Controllers/blogs.controllers')
 const upload = require('../Middlewares/multer.middleware')
 const VerifyJwt = require('../Middlewares/auth.middleware')
 const Blogs = require('../Models/blogs.models')
@@ -30,6 +30,11 @@ BlogRouter.route('/:BlogId')
   
 BlogRouter.route('/comment/:BlogId')
 .post(VerifyJwt,createComment)
+
+BlogRouter.route('/comment/:commentId')
+.delete(VerifyJwt,deleteComment)
+
+
 
 
 

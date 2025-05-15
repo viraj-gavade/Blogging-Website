@@ -80,7 +80,6 @@ const SigninPage = () => {
 
   return (
     <>
-      <Navbar />
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 animate__animated animate__fadeIn">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -159,11 +158,7 @@ const SigninPage = () => {
                   </label>
                 </div>
 
-                <div className="text-sm">
-                  <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                    Forgot your password?
-                  </a>
-                </div>
+               
               </div>
 
               <div>
