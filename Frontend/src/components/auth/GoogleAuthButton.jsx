@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useAuth } from '../AuthContext';
 
 const GoogleAuthButton = ({ text }) => {
   const handleGoogleAuth = () => {

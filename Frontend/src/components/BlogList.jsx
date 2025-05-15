@@ -3,7 +3,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
 import { Link } from 'react-router-dom';
-import { useAuth } from './AuthContext';
 
 const BlogList = ({ blogs: propBlogs }) => {
   const [blogs, setBlogs] = useState(propBlogs || []);
@@ -100,7 +99,7 @@ const BlogList = ({ blogs: propBlogs }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 animate__animated animate__fadeIn">Latest Articles</h1>
+      <h1 className="text-3xl font-bold mb-6 animate__animated animate__fadeIn text-black">Latest Articles</h1>
       
       {blogs && blogs.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate__animated animate__fadeIn">
@@ -112,7 +111,7 @@ const BlogList = ({ blogs: propBlogs }) => {
                 className="w-full h-48 object-cover"
               />
               <div className="p-4 flex flex-col justify-between min-h-[10rem]">
-                <h3 className="text-lg font-semibold mb-4 line-clamp-2">{blog.title}</h3>
+                <h3 className="text-lg font-semibold mb-4 line-clamp-2 text-black">{blog.title}</h3>
                 <div className="mt-auto">
                   <Link 
                     to={`/api/v1/blog/${blog._id}`} 

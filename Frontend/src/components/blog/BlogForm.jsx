@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { toast } from 'react-toastify'; // Only import toast function, not ToastContainer
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
@@ -14,7 +14,19 @@ const BlogForm = () => {
     body: '',
     coverImage: null
   });
+  const [previewUrl, setPreviewUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Generate preview URL when image changes
+  useEffect(() => {
+    if (formData.coverImage && formData.coverImage instanceof File) {
+      const url = URL.createObjectURL(formData.coverImage);
+      setPreviewUrl(url);
+      
+      // Clean up the URL when component unmounts or image changes
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [formData.coverImage]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +41,14 @@ const BlogForm = () => {
       ...formData,
       coverImage: file
     });
+  };
+
+  const handleRemoveImage = () => {
+    setFormData({
+      ...formData,
+      coverImage: null
+    });
+    setPreviewUrl('');
   };
 
   const handleSubmit = async (e) => {
@@ -116,16 +136,42 @@ const BlogForm = () => {
             required
           />
 
-          <FileUpload
-            label="Cover Image"
-            id="coverImage"
-            name="CoverImageURL"
-            accept="image/*"
-            onChange={handleFileChange}
-            file={formData.coverImage}
-            supportedFormats="Supported formats: JPG, PNG, GIF"
-            required
-          />
+          <div className="space-y-4">
+            <FileUpload
+              label="Cover Image"
+              id="coverImage"
+              name="CoverImageURL"
+              accept="image/*"
+              onChange={handleFileChange}
+              file={formData.coverImage}
+              supportedFormats="Supported formats: JPG, PNG, GIF"
+              required
+            />
+            
+            {/* Image Preview */}
+            {previewUrl && (
+              <div className="mt-4 relative">
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Image Preview</h3>
+                <div className="relative rounded-lg overflow-hidden border border-gray-300">
+                  <img 
+                    src={previewUrl} 
+                    alt="Cover preview" 
+                    className="w-full h-48 object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                    title="Remove image"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 111.414 1.414L11.414 10l4.293 4.293a1 1 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 01-1.414-1.414L8.586 10 4.293 5.707a1 1 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
           <button
             type="submit"

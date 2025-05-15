@@ -10,6 +10,8 @@ import SigninPage from './pages/SigninPage';
 import ErrorBoundary from './components/ErrorBoundary';
 // Import ToastContainer at the app level
 import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify'; // Only import toast function, not ToastContainer
+
 import 'react-toastify/dist/ReactToastify.css';
 
 // Wrap routes that require authentication
