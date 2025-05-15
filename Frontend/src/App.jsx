@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import BlogList from './components/BlogList';
 import BlogDetailPage from './pages/BlogDetailPage';
+import CreateBlogPage from './pages/CreateBlogPage';
 
 function App() {
   // Later this can be replaced with actual authentication state
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
     <Router>
@@ -32,6 +33,7 @@ function App() {
               </>
             } />
             <Route path="/blog/:id" element={<BlogDetailPage />} />
+            <Route path="/blog/create" element={<CreateBlogPage />} />
           </Routes>
         </main>
       </div>

@@ -144,6 +144,36 @@ button:focus-visible {
   .dark .prose {
     @apply prose-invert;
   }
+
+  /* Form specific styles */
+  .form-group {
+    @apply flex flex-col mb-4;
+  }
+  
+  .form-label {
+    @apply font-semibold text-sm mb-2 text-gray-700;
+  }
+  
+  .form-input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-700 transition-all duration-200;
+  }
+  
+  .form-input:focus {
+    @apply outline-none border-blue-500 ring-2 ring-blue-200;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200;
+  }
+  
+  /* File upload styles */
+  .file-upload-box {
+    @apply border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 border-gray-300 bg-gray-50/80 hover:border-blue-500 hover:bg-blue-50/50;
+  }
+  
+  .file-upload-box-dragging {
+    @apply border-blue-500 bg-blue-50;
+  }
 }
 
 /* Custom dark mode styles */

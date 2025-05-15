@@ -8,7 +8,8 @@ const BlogDetailPage = () => {
   const [blog, setBlog] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Would come from auth context in a real app
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [currentUser, setCurrentUser] = useState({ id: 'current-user', fullName: 'Current User' });
 
   useEffect(() => {
     // Simulate fetching blog data
@@ -25,14 +26,20 @@ const BlogDetailPage = () => {
       {
         id: '1',
         content: 'Great article! This really helped me understand the JavaScript ecosystem better.',
-        CommentBy: { fullName: 'Alice Johnson' },
+        CommentBy: { id: 'user1', fullName: 'Alice Johnson' },
         createdAt: new Date(Date.now() - 86400000).toLocaleDateString() // 1 day ago
       },
       {
         id: '2',
         content: 'I would love to see a follow-up article about TypeScript integration with these tools.',
-        CommentBy: { fullName: 'Bob Smith' },
+        CommentBy: { id: 'user2', fullName: 'Bob Smith' },
         createdAt: new Date(Date.now() - 43200000).toLocaleDateString() // 12 hours ago
+      },
+      {
+        id: '3',
+        content: 'This is my comment that I should be able to delete.',
+        CommentBy: { id: 'current-user', fullName: 'Current User' },
+        createdAt: new Date().toLocaleDateString() // current time
       }
     ];
 
@@ -52,7 +59,7 @@ const BlogDetailPage = () => {
     }
 
     // In a real app, you would check auth state here
-    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true' || true); // Set to true for demo purposes
   }, [id]);
 
   const handleCommentSubmit = (e) => {
@@ -64,13 +71,25 @@ const BlogDetailPage = () => {
     const newComment = {
       id: Date.now().toString(),
       content: commentText,
-      CommentBy: { fullName: 'Current User' },
+      CommentBy: currentUser,
       createdAt: new Date().toLocaleDateString()
     };
     
     setComments([newComment, ...comments]);
     setCommentText('');
     toast.success('Comment added successfully!');
+  };
+
+  const handleDeleteComment = (commentId) => {
+    if (window.confirm('Are you sure you want to delete this comment?')) {
+      // In a real app, this would be an API call
+      setComments(comments.filter(comment => comment.id !== commentId));
+      toast.success('Comment deleted successfully!');
+    }
+  };
+
+  const isCommentOwner = (comment) => {
+    return comment.CommentBy.id === currentUser.id;
   };
 
   if (!blog) {
@@ -116,7 +135,20 @@ const BlogDetailPage = () => {
               key={comment.id} 
               className="py-6 border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700 hover:-mx-4 hover:px-4 rounded-lg transition-all"
             >
-              <p className="mb-3 text-gray-800 dark:text-gray-200">{comment.content}</p>
+              <div className="flex justify-between">
+                <p className="mb-3 text-gray-800 dark:text-gray-200">{comment.content}</p>
+                {isLoggedIn && isCommentOwner(comment) && (
+                  <button
+                    onClick={() => handleDeleteComment(comment.id)}
+                    className="text-red-500 hover:text-red-700 ml-2"
+                    title="Delete comment"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                )}
+              </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">
                 <span className="inline-block mr-4">By {comment.CommentBy.fullName}</span>
                 <span>Posted on {comment.createdAt}</span>
