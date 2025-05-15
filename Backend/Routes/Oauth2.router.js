@@ -85,7 +85,7 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
         path: '/',
         sameSite: 'lax', // Helps with cross-site requests
         // secure: true, // Uncomment this in production with HTTPS
-      }).redirect('/api/v1/blog/allBlogs');
+      }).redirect('/');
     
     }
     
@@ -111,7 +111,7 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
       path: '/',
       sameSite: 'lax', // Helps with cross-site requests
       // secure: true, // Uncomment this in production with HTTPS
-    }).redirect('/api/v1/blog/allBlogs');
+    }).redirect('/');
   }
 );
 
