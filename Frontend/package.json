@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx vite build",  // This is trying to run vite directly
+    "build": "npx vite build",  
     "lint": "eslint .",
     "preview": "vite preview"
   },
