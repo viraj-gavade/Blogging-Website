@@ -7,9 +7,8 @@ import BlogForm from '../components/blog/BlogForm';
 const CreateBlogPage = () => {
   return (
     <>
-      <main className="container mx-auto px-4">
+      <Navbar />
         <BlogForm />
-      </main>
       <ToastContainer position="bottom-right" />
     </>
   );

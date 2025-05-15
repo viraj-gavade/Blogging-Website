@@ -1,12 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const GoogleAuthButton = ({ text }) => {
-  const handleGoogleAuth = () => {
-    // Redirect to Google OAuth endpoint in your backend
-    window.location.href = '/api/v1/user/auth/google';
-  };
 
+const GoogleAuthButton = ({ text }) => {
+  const handleGoogleAuth = async () => {
+    try {
+      // Redirect to Google OAuth endpoint in your backend
+      const response = await fetch('/google', {
+        headers: {
+          'Accept': 'application/json'
+        },
+        credentials: 'include'
+      });
+      
+      // If the response is JSON, we'll handle it
+      if (response.headers.get('content-type')?.includes('application/json')) {
+        const data = await response.json();
+        // Handle the response data here
+        console.log(data);
+      } else {
+        // If response is not JSON, it's likely a redirect to Google OAuth
+        window.location.href = '/google';
+      }
+    } catch (error) {
+      console.error('Error initiating Google auth:', error);
+    }
+  };
+  
   return (
     <button
       type="button"

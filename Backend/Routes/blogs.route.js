@@ -18,10 +18,8 @@ BlogRouter.route('/allBlogs').get(async (req,res)=>{
     try {
         console.log(req.user)
         const Blog = await Blogs.find({}).populate('title')
-        return res.render('home',{
-            user:req.user,
-            allblogs:Blog
-        })
+        console.log(Blog)
+        return res.json(Blog)
     } catch (error) {
         console.log(error)
     }

@@ -2,61 +2,101 @@ import React, { useState, useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
-import BlogCard from './BlogCard';
+import { Link } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
-const BlogList = ({ blogs: externalBlogs }) => {
-  // Sample blog data - use provided blogs (props) or default to sample data
-  const [blogs, setBlogs] = useState(externalBlogs || [
-    {
-      id: '1',
-      title: 'Getting Started with React and Tailwind CSS',
-      coverImage: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: '2',
-      title: 'Modern Backend Development with Node.js and Express',
-      coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: '3',
-      title: 'Implementing Authentication Using JWT and OAuth',
-      coverImage: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-    },
-    {
-      id: '4',
-      title: 'Building Responsive UIs with Modern CSS Techniques',
-      coverImage: 'https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-    },
-  ]);
+const BlogList = ({ blogs: propBlogs }) => {
+  const [blogs, setBlogs] = useState(propBlogs || []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Clear blogs for testing empty state
-  // Uncomment this line to test empty state
-  // useEffect(() => { setBlogs([]); }, []);
-
-  // Check URL parameters for notifications
   useEffect(() => {
+    // Check URL parameters for notifications
     const urlParams = new URLSearchParams(window.location.search);
     const action = urlParams.get('action');
     
+    if (action === 'login_success') {
+      toast.success('Successfully logged in!');
+    } else if (action === 'blog_posted') {
+      toast.success('Your blog has been published!');
+    } else if (action === 'comment_added') {
+      toast.success('Comment added successfully!');
+    }
+    
+    // Clean URL after showing notification
     if (action) {
-      switch (action) {
-        case 'login_success':
-          toast.success('Logged in successfully!');
-          break;
-        case 'blog_posted':
-          toast.success('Your blog was posted!');
-          break;
-        case 'comment_added':
-          toast.success('Comment added successfully!');
-          break;
-        default:
-          break;
-      }
-      
-      // Clean URL after showing notification (without refreshing the page)
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, []);
+
+    // If blogs were not provided as props, fetch them from the API
+    if (!propBlogs) {
+      fetchBlogs();
+    } else {
+      setLoading(false);
+    }
+  }, [propBlogs]);
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await fetch('/api/v1/blog/allBlogs', {
+        headers: {
+          'Accept': 'application/json'
+        },
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch blogs');
+      }
+      
+      const data = await response.json();
+      // Handle the array structure directly from your API
+      setBlogs(Array.isArray(data) ? data : []);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching blogs:', err);
+      setError('Failed to load blogs. Please try again later.');
+      toast.error('Failed to load blogs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-6"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white rounded-lg overflow-hidden shadow-md">
+                <div className="h-48 bg-gray-300"></div>
+                <div className="p-4">
+                  <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-10 bg-gray-200 rounded"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h2 className="text-3xl font-bold mb-6 text-red-600">Error</h2>
+        <p className="text-gray-700">{error}</p>
+        <button 
+          onClick={fetchBlogs}
+          className="mt-4 bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -65,17 +105,34 @@ const BlogList = ({ blogs: externalBlogs }) => {
       {blogs && blogs.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate__animated animate__fadeIn">
           {blogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
+            <div key={blog._id} className="blog-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <img 
+                src={blog.CoverImageURL} 
+                alt={`${blog.title} cover image`}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4 flex flex-col justify-between min-h-[10rem]">
+                <h3 className="text-lg font-semibold mb-4 line-clamp-2">{blog.title}</h3>
+                <div className="mt-auto">
+                  <Link 
+                    to={`/api/v1/blog/${blog._id}`} 
+                    className="block bg-primary-600 text-white py-2 px-4 rounded hover:bg-primary-700 transition-all duration-300 text-center"
+                  >
+                    Read Article
+                  </Link>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       ) : (
-        <div className="empty-state bg-white rounded-lg p-8 text-center shadow-sm animate__animated animate__fadeIn">
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No articles yet</h3>
-          <p className="text-gray-500">Be the first to share your thoughts!</p>
+        <div className="text-center py-12 bg-gray-50 rounded-lg animate__animated animate__fadeIn">
+          <h3 className="text-xl font-semibold text-gray-700">No articles yet</h3>
+          <p className="text-gray-500 mt-2">Be the first to share your thoughts!</p>
         </div>
       )}
 
-      <ToastContainer
+      <ToastContainer 
         position="bottom-right"
         autoClose={3000}
         hideProgressBar={false}

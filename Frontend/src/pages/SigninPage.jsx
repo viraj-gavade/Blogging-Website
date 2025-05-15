@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
 import Navbar from '../components/Navbar';
 import GoogleAuthButton from '../components/auth/GoogleAuthButton';
+import { useAuth } from '../components/AuthContext';
 
 const SigninPage = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const SigninPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +39,8 @@ const SigninPage = () => {
       const response = await fetch('/api/v1/user/signin', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           email: formData.email,
@@ -46,23 +49,31 @@ const SigninPage = () => {
         credentials: 'include' // Important for cookies
       });
 
+      const data = await response.json();
+      
       if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Incorrect email or password');
-        }
-        throw new Error('Failed to sign in');
+        throw new Error(data.message || 'Failed to sign in');
       }
 
-      // Set local authentication state
+      // Store auth data first
       localStorage.setItem('isLoggedIn', 'true');
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
       
-      // Redirect to homepage after successful login
-      navigate('/?action=login_success');
+      // Then update context state
+      login(data.user);
+      
+      toast.success('Signed in successfully!');
+      
+      // Wait for toast to be visible before navigating
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
       
     } catch (error) {
       console.error('Signin error:', error);
       toast.error(error.message || 'Failed to sign in. Please try again.');
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -118,7 +129,7 @@ const SigninPage = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-black">
                   Password
                 </label>
                 <div className="mt-1">

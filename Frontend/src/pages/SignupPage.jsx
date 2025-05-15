@@ -53,7 +53,7 @@ const SignupPage = () => {
         })
       });
 
-      if (!response.ok) {
+      if (!response.created) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to create account');
       }
@@ -107,7 +107,7 @@ const SignupPage = () => {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-                  Full Name <span className="text-red-500">*</span>
+                  Full Name <span className="text-black">*</span>
                 </label>
                 <div className="mt-1">
                   <input
@@ -118,7 +118,7 @@ const SignupPage = () => {
                     required
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-black"
                     placeholder="John Doe"
                   />
                 </div>
@@ -137,7 +137,7 @@ const SignupPage = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-black"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -156,7 +156,7 @@ const SignupPage = () => {
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-black"
                     placeholder="••••••••"
                   />
                 </div>
@@ -175,7 +175,7 @@ const SignupPage = () => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm text-black"
                     placeholder="••••••••"
                   />
                 </div>

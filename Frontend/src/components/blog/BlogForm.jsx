@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
 import FormInput from './FormInput';
 import FormTextarea from './FormTextarea';
 import FileUpload from './FileUpload';
 
 const BlogForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     body: '',
@@ -32,55 +35,52 @@ const BlogForm = () => {
     e.preventDefault();
     
     // Validate form
+    if (!formData.title.trim()) {
+      toast.error("Please enter a blog title");
+      return;
+    }
+    
+    if (!formData.body.trim()) {
+      toast.error("Please enter blog content");
+      return;
+    }
+    
     if (!formData.coverImage) {
-      toast.error("Please upload a cover image.");
+      toast.error("Please upload a cover image");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Create FormData object for file upload
+      // Create multipart form data
       const data = new FormData();
       data.append('title', formData.title);
       data.append('body', formData.body);
       data.append('CoverImageURL', formData.coverImage);
 
-      // In a real app, you would use fetch or axios to submit the form
-      // For now, we'll simulate a successful submission
-      setTimeout(() => {
-        toast.success("Blog post published successfully!");
-        // Reset form after successful submission
-        setFormData({
-          title: '',
-          body: '',
-          coverImage: null
-        });
-        setIsSubmitting(false);
-      }, 1500);
-
-      // Actual fetch would look like:
-      /*
+      // Submit to backend
       const response = await fetch('/api/v1/blog/addblog', {
         method: 'POST',
-        body: data
+        body: data,
+        credentials: 'include' // Important for cookies/auth
       });
 
       if (!response.ok) {
-        throw new Error('Failed to publish blog post');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to publish blog post');
       }
 
-      const result = await response.json();
       toast.success("Blog post published successfully!");
-      setFormData({
-        title: '',
-        body: '',
-        coverImage: null
-      });
-      */
+      
+      // Redirect after successful submission
+      setTimeout(() => {
+        navigate('/?action=blog_posted');
+      }, 1500);
+      
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error(error.message || "Failed to publish blog post");
+      toast.error(error.message || "Failed to publish blog post. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -94,6 +94,7 @@ const BlogForm = () => {
         <form 
           className="flex flex-col gap-6"
           onSubmit={handleSubmit}
+          encType="multipart/form-data"
         >
           <FormInput
             label="Title"
@@ -123,6 +124,7 @@ const BlogForm = () => {
             onChange={handleFileChange}
             file={formData.coverImage}
             supportedFormats="Supported formats: JPG, PNG, GIF"
+            required
           />
 
           <button
@@ -134,6 +136,8 @@ const BlogForm = () => {
           </button>
         </form>
       </div>
+      
+      <ToastContainer position="bottom-right" />
     </div>
   );
 };
