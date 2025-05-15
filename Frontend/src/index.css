@@ -94,19 +94,69 @@ button:focus-visible {
   
   /* Additional blog card specific styles */
   .blog-card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300;
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 h-full border-none;
   }
   
   .blog-card:hover {
-    @apply shadow-lg transform translate-y-[-4px];
+    @apply shadow-lg transform translate-y-[-4px] -translate-y-1 shadow-xl;
   }
   
   .blog-tag {
     @apply px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full inline-block;
   }
 
+  .blog-title {
+    @apply text-lg font-semibold mb-3 line-clamp-2;
+  }
+  
+  .empty-state {
+    @apply text-center py-12 px-4 text-gray-600;
+  }
+  
+  /* Toast customization */
+  .Toastify__toast {
+    @apply rounded-lg shadow-md;
+  }
+  
+  .Toastify__toast-body {
+    @apply font-medium;
+  }
+
   /* Additional navbar styles matching EJS version */
   .navbar-links.active {
     @apply flex flex-col absolute top-16 left-0 right-0 bg-gray-900 p-4 z-50;
+  }
+
+  /* Comments specific styles */
+  .comment {
+    @apply border-b border-gray-200 dark:border-gray-700 py-6 transition-all;
+  }
+  
+  .comment:last-child {
+    @apply border-b-0;
+  }
+  
+  .comment:hover {
+    @apply bg-gray-50 dark:bg-gray-800 -mx-4 px-4 rounded-lg shadow-sm;
+  }
+  
+  /* Dark mode support */
+  .dark .prose {
+    @apply prose-invert;
+  }
+}
+
+/* Custom dark mode styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f1f5f9;
+    background-color: #0f172a;
+  }
+  
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
   }
 }

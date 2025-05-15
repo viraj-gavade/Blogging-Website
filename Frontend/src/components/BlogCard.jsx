@@ -1,30 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
-const BlogCard = () => {
-  // Simplified version with just one featured blog post as shown in the screenshot
-  const blog = {
-    id: 1,
-    title: "Getting Started with React and Tailwind CSS",
-    coverImage: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-  };
-
+const BlogCard = ({ blog }) => {
   return (
-    <div className="container-custom py-6">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Latest Blog Posts</h2>
-      
-      <div className="grid">
-        <div className="bg-white rounded-lg overflow-hidden shadow-md">
-          {/* Blog Image */}
-          <img 
-            src={blog.coverImage} 
-            alt={blog.title} 
-            className="w-full object-cover" 
-            style={{ maxHeight: '400px' }}
-          />
-        </div>
+    <div className="blog-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 text-black">
+      <img 
+        src={blog.coverImage} 
+        alt={`${blog.title} cover`} 
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4 flex flex-col justify-between h-36">
+        <h2 className="text-xl font-semibold mb-4 line-clamp-2">{blog.title}</h2>
+        <Link 
+          to={`/blog/${blog.id}`} 
+          className="bg-primary-600 text-white py-2 px-4 rounded text-center font-medium hover:bg-primary-700 transition-colors duration-300"
+        >
+          Read Article
+        </Link>
       </div>
     </div>
   );
+};
+
+BlogCard.propTypes = {
+  blog: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    coverImage: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default BlogCard;
