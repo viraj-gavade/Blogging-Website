@@ -3,14 +3,9 @@ const {SignUpUser,SignInUser,SignOut} = require('../Controllers/users.controller
 const UserRouter = express.Router()
 
 
-UserRouter.route('/signup').post(SignUpUser).get((req,res)=>{
-    res.render('signup')
-})
-UserRouter.route('/signin').post(SignInUser).get((req,res)=>{
-    res.render('signin')
-})
+UserRouter.route('/signup').post(SignUpUser)
+UserRouter.route('/signin').post(SignInUser)
 UserRouter.route('/signout').get(SignOut)
-
 
 
 

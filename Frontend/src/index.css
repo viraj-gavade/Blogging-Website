@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  @apply text-primary-600 hover:text-primary-700;
+  font-weight: 500;
+  text-decoration: inherit;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* Custom utility classes */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded font-medium transition duration-200 ease-in-out;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-600 hover:bg-secondary-700 text-white;
+  }
+  
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Add line clamp utilities if not using the line-clamp plugin */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  /* Additional blog card specific styles */
+  .blog-card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 h-full border-none;
+  }
+  
+  .blog-card:hover {
+    @apply shadow-lg transform translate-y-[-4px] -translate-y-1 shadow-xl;
+  }
+  
+  .blog-tag {
+    @apply px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full inline-block;
+  }
+
+  .blog-title {
+    @apply text-lg font-semibold mb-3 line-clamp-2;
+  }
+  
+  .empty-state {
+    @apply text-center py-12 px-4 text-gray-600;
+  }
+  
+  /* Toast customization */
+  .Toastify__toast {
+    @apply rounded-lg shadow-md;
+  }
+  
+  .Toastify__toast-body {
+    @apply font-medium;
+  }
+
+  /* Additional navbar styles matching EJS version */
+  .navbar-links.active {
+    @apply flex flex-col absolute top-16 left-0 right-0 bg-gray-900 p-4 z-50;
+  }
+
+  /* Comments specific styles */
+  .comment {
+    @apply border-b border-gray-200 dark:border-gray-700 py-6 transition-all;
+  }
+  
+  .comment:last-child {
+    @apply border-b-0;
+  }
+  
+  .comment:hover {
+    @apply bg-gray-50 dark:bg-gray-800 -mx-4 px-4 rounded-lg shadow-sm;
+  }
+  
+  /* Dark mode support */
+  .dark .prose {
+    @apply prose-invert;
+  }
+
+  /* Form specific styles */
+  .form-group {
+    @apply flex flex-col mb-4;
+  }
+  
+  .form-label {
+    @apply font-semibold text-sm mb-2 text-gray-700;
+  }
+  
+  .form-input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-700 transition-all duration-200;
+  }
+  
+  .form-input:focus {
+    @apply outline-none border-blue-500 ring-2 ring-blue-200;
+  }
+  
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200;
+  }
+  
+  /* File upload styles */
+  .file-upload-box {
+    @apply border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200 border-gray-300 bg-gray-50/80 hover:border-blue-500 hover:bg-blue-50/50;
+  }
+  
+  .file-upload-box-dragging {
+    @apply border-blue-500 bg-blue-50;
+  }
+}
+
+/* Custom dark mode styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f1f5f9;
+    background-color: #0f172a;
+  }
+  
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

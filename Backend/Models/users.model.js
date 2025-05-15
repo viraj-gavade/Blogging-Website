@@ -58,34 +58,43 @@ UserSchema.pre('save', function (next) {
     next();  // Call next to proceed with saving
 });
 
-UserSchema.static('matchpasswordAndGenerateToken', async function (email,password) {
-    const user =  await this.findOne({email})
-    console.log(password)
-    console.log(user)
-    if(!user){
-        throw new Error("User not found!")
+UserSchema.static('matchpasswordAndGenerateToken', async function (email, password) {
+    try {
+        const user = await this.findOne({email})
+        console.log("Login attempt for email:", email)
+        
+        if (!user) {
+            throw new Error("User not found!")
+        }
+
+        // Check if user has Google OAuth authentication only (no password)
+        if (!user.password || !user.salt) {
+            throw new Error("This account uses Google login. Please sign in with Google.")
+        }
+
+        const userSalt = user.salt
+        const hashedPassword = user.password
+
+        console.log("Verifying password...")
+
+        // Check if user has provided the correct password
+        const userProvidedPassword = createHmac('sha256', userSalt)
+            .update(password)
+            .digest('hex');
+
+        console.log("Password match:", userProvidedPassword === hashedPassword)
+
+        if (userProvidedPassword !== hashedPassword) {
+            throw new Error("Incorrect password provided!")
+        }
+
+        const token = GenerateToken(user)
+        console.log("Token generated successfully")
+        return token
+    } catch (error) {
+        console.error("Authentication error:", error.message)
+        throw error
     }
-
-    const UserSalt = user.salt
-    const hashedPassword = user.password
-
-    console.log(hashedPassword,UserSalt)
-
-    //Check if user has provided the correct password
-
-    const UserProvidedPassword  = createHmac('sha256', UserSalt)
-    .update(password)
-    .digest('hex');
-
-    console.log(UserProvidedPassword)
-
-    if(UserProvidedPassword !==hashedPassword ){
-        throw new Error("Incorrect password proovided!")
-    }
-
-    const token = GenerateToken(user)
-    console.log(token)
-    return token
 })
 
 module.exports = mongoose.model('User',UserSchema)
