@@ -6,12 +6,11 @@
     "dev:backend": "nodemon Backend/app.js",
     "dev:frontend": "cd Frontend && npm run dev",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "build": "cd Frontend && npm run build",
-    "deploy": "npm run build && NODE_ENV=production npm start"
+    "build": "cd Frontend && npm ci && npx vite build",
+    "deploy": "npm run build && NODE_ENV=production npm start",
+    "install-all": "npm install && cd Frontend && npm install && cd ../Backend && npm install"
   },
   "dependencies": {
-    
     "concurrently": "^8.0.1"
   }
-  
 }
